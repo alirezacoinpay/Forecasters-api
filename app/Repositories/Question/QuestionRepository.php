@@ -28,11 +28,14 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
     {
         return $this->model
             ->newQuery()
-            ->withCount('userPredictions')
-            ->with('questionOptions', function ($query) {
+            ->withCount(['userPredictions', 'comments'])
+            ->with(['comments' => function ($query) {
+                $query->with(['user'])
+                ->withCount(['children']);
+            }, 'tags', 'questionOptions' => function ($query) {
                 $query->withCount('userPredictions')
-                ->with('myPrediction');
-            })
+                    ->with('myPrediction');
+            }])
             ->find($id);
     }
 
@@ -80,7 +83,9 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
     {
         $query = $this->model
             ->newQuery()
-            ->with(['tags'])
+            ->with(['tags', 'user', 'questionOptions' => function ($query) {
+                $query->withCount('userPredictions');
+            }])
             ->withCount(['comments', 'userPredictions', 'questionForwards']);
 
 

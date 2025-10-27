@@ -28,7 +28,7 @@ class QuestionController extends Controller
         $validated = $request->validated();
         $questions = $this->repository->allFeedPage($validated);
 
-        return $this->success($questions);
+        return $this->success(QuestionResource::collection($questions));
     }
 
 }

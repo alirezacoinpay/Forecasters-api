@@ -10,6 +10,12 @@ class UserPredictionResource extends JsonResource
 
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'user_id' => $this->user_id,
+            'question_option_id' => $this->question_option_id,
+            'percentage' => $this->percentage,
+            'question' => new QuestionResource($this->whenLoaded('question')),
+            'questionOption' => new QuestionOptionResource($this->whenLoaded('question')),
+        ];
     }
 }

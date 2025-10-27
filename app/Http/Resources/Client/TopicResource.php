@@ -10,6 +10,10 @@ class TopicResource extends JsonResource
 
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'title' => $this->title,
+            'icon' => $this->icon,
+            'status' => $this->status,
+        ];
     }
 }
