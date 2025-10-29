@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends BaseModel
@@ -35,6 +36,12 @@ class Question extends BaseModel
     public function questionOptions(): HasMany
     {
         return $this->hasMany(QuestionOption::class );
+    }
+
+    public function questionTrueOption(): HasOne
+    {
+        return $this->hasOne(QuestionOption::class)
+            ->where('is_true', true);
     }
     public function comments(): HasMany
     {
@@ -67,5 +74,33 @@ class Question extends BaseModel
             'id'
         );
     }
+
+    public function correctUserPredictions(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            UserPrediction::class,
+            QuestionOption::class,
+            'question_id',
+            'question_option_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function questionForecasters(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            User::class,              // Final model we want
+            UserPrediction::class,    // Intermediate model
+            'question_option_id',     // Foreign key on UserPrediction table...
+            'id',                     // Foreign key on User table...
+            'id',                     // Local key on Question table...
+            'user_id'                 // Local key on UserPrediction table...
+        )->whereIn(
+            'user_predictions.question_option_id',
+            $this->questionOptions()->pluck('id')
+        );
+    }
+
 
 }
