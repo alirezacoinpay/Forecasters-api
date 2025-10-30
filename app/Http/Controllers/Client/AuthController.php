@@ -28,14 +28,14 @@ class AuthController extends Controller
         if ($otpCode){
 
             $result = Sms::sendOtp($user->mobile, $otpCode, SmsTemplate::LOGIN->value);
-            if ($result['success']){
+//            if ($result['success']){
 
                 return $this->success([
                     'otp' => $otpCode,
                 ], 'api.otp.send');
-            }else{
-                return $this->error($result['message']);
-            }
+//            }else{
+//                return $this->error($result['message']);
+//            }
         }
         return $this->error('api.otp.not_expired_please_wait');
     }

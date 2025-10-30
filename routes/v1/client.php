@@ -8,17 +8,13 @@ use App\Http\Controllers\Client\{
     UserPredictionController,
     AuthController,
     UserController,
+    ActivityController,
 };
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group( function () {
     Route::post('/send-otp', 'sendOtp');
     Route::post('/verify-otp', 'verifyOtp');
-});
-
-Route::controller(UserController::class)->middleware(['auth:sanctum', 'client'])->group( function () {
-    Route::get('/me', 'me');
-    Route::put('/edit-profile', 'editProfile');
 });
 
 Route::controller(CategoryController::class)->group( function () {
@@ -46,10 +42,23 @@ Route::controller(CommentController::class)->group( function () {
     Route::put('/comments/{id}', 'update');
     Route::delete('/comments/{id}', 'destroy');
 });
-Route::controller(UserPredictionController::class)->group( function () {
-    Route::get('/predictions/{id}', 'show');
-    Route::get('/predictions', 'index');
-    Route::post('/predictions', 'store');
-    Route::put('/predictions/{id}', 'update');
-    Route::delete('/predictions/{id}', 'destroy');
+
+Route::middleware(['auth:sanctum', 'client'])->group( function () {
+
+    Route::controller(UserController::class)->group( function () {
+        Route::get('/me', 'me');
+        Route::put('/edit-profile', 'editProfile');
+    });
+
+    Route::controller(UserPredictionController::class)->group( function () {
+        Route::get('/predictions/{id}', 'show');
+        Route::get('/predictions', 'index');
+        Route::post('/predictions', 'store');
+        Route::put('/predictions/{id}', 'update');
+        Route::delete('/predictions/{id}', 'destroy');
+    });
+
+    Route::post('/activity', ActivityController::class)->middleware('throttle:60,1');
+
+
 });
