@@ -18,7 +18,7 @@ class QuestionCacheRepository extends BaseCacheRepository implements QuestionRep
        'findQuestionOptionByIdLight' => 'single_light_question_option_id_',
        'findByIdLight' => 'single_light_question_id_',
        'findFeedPage' => 'single_feed_page_question_id_',
-       'allFeedPage' => 'all_feed_page_questionss_',
+       'userFeedQuestions' => 'user_feed_page_questionss_',
        'all' => 'all_questionss_',
     ];
 
@@ -36,6 +36,15 @@ class QuestionCacheRepository extends BaseCacheRepository implements QuestionRep
 
         return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($id) {
            return $this->repository->findQuestionOptionById($id);
+        });
+    }
+
+    public function userFeedQuestion($id, $userId= null)
+    {
+        $key = $this->generateKey([$id, $userId]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($id, $userId) {
+           return $this->repository->userFeedQuestion($id, $userId);
         });
     }
     public function findQuestionOptionByIdLight($id)
@@ -82,12 +91,12 @@ class QuestionCacheRepository extends BaseCacheRepository implements QuestionRep
         });
     }
 
-    public function allFeedPage($params = [])
+    public function userFeedQuestions($userId = null, $params = [])
     {
-        $key = $this->generateKey([$params]);
+        $key = $this->generateKey([$userId = null, $params]);
 
-        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($params) {
-          return  $this->repository->allFeedPage($params);
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId, $params) {
+          return  $this->repository->userFeedQuestions($userId, $params);
         });
     }
 

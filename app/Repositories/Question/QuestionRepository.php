@@ -39,6 +39,24 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
             ->find($id);
     }
 
+    public function userFeedQuestion($id, $userId = null)
+    {
+        return $this->model
+            ->newQuery()
+            ->with(['userPrediction' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])
+            ->withCount(['userPredictions', 'comments'])
+            ->with(['comments' => function ($query) {
+                $query->with(['user'])
+                ->withCount(['children']);
+            }, 'tags', 'questionOptions' => function ($query) {
+                $query->withCount('userPredictions')
+                    ->with('myPrediction');
+            }])
+            ->find($id);
+    }
+
     public function findQuestionOptionByIdLight($id)
     {
         return $this->questionOptionModel
@@ -79,7 +97,7 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
 
     }
 
-    public function allFeedPage($params = [])
+    public function userFeedQuestions($userId = null, $params = [])
     {
         $query = $this->model
             ->newQuery()

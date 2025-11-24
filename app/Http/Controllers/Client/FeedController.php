@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\Feed\FeedsRequest;
 use App\Http\Resources\Client\QuestionResource;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 
-class QuestionController extends Controller
+class FeedController extends Controller
 {
     protected ?int $userId;
     public function __construct(
@@ -16,13 +17,13 @@ class QuestionController extends Controller
         $this->userId = auth()->user()->getAuthIdentifier() ?? null;
     }
 
-    public function show($id): JsonResponse
-    {
-        $question = $this->repository->userFeedQuestion($id, $this->userId);
 
-        return $question
-            ? $this->success(new QuestionResource($question))
-            : $this->error('api.not_found.question', [], 404);
+    public function feedPageQuestions(FeedsRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $questions = $this->repository->userFeedQuestions($this->userId, $validated);
+
+        return $this->success(QuestionResource::collection($questions));
     }
 
 }

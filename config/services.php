@@ -47,4 +47,8 @@ return [
             'otpLoginBodyID' => env('MELLI_PAYAMAK_OTP_LOGIN_BODY_ID', '246526'),
         ],
     ],
+    'openai' => [
+        'api_key' => env('LIARA_AI_KEY'),
+        'base_url' => env('LIARA_AI_BASE_URL'),
+    ]
 ];

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends BaseModel
@@ -61,6 +62,18 @@ class Question extends BaseModel
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'question_tags');
+    }
+
+    public function userPrediction(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            UserPrediction::class,
+            QuestionOption::class,
+            'question_id',
+            'question_option_id',
+            'id',
+            'id'
+        );
     }
 
     public function userPredictions(): HasManyThrough

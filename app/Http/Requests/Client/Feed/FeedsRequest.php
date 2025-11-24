@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Client\Questions;
+namespace App\Http\Requests\Client\Feed;
 
 use App\Traits\HasIndexRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AllQuestionsRequest extends FormRequest
+class FeedsRequest extends FormRequest
 {
     use HasIndexRules;
     public function authorize(): bool

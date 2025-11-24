@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comment extends BaseModel
 {
     public const string TAG = "comment";
-
     public const string FILE_PATH = "comments";
 
     protected $fillable = [
@@ -25,9 +24,8 @@ class Comment extends BaseModel
 
     public function question(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Question::class);
+        return $this->belongsTo(Question::class);
     }
-
 
     public function parent(): BelongsTo
     {
@@ -36,6 +34,6 @@ class Comment extends BaseModel
 
     public function children(): HasMany
     {
-        return $this->hasMany(Comment::class, 'id', 'parent_id');
+        return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
 }

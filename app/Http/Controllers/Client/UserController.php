@@ -20,6 +20,7 @@ class UserController extends Controller
     public function me() : JsonResponse
     {
         $user = auth()->user();
+        $user->load('userPredictions');
         return $this->success(['user' => $user]);
     }
 
