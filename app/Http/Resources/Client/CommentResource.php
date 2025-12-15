@@ -23,6 +23,7 @@ class CommentResource extends JsonResource
             'parent' => new CommentResource($this->whenLoaded('parent')),
             'children' => CommentResource::collection($this->whenLoaded('children')),
             'childrenCount' => $this->whenCounted('children'),
+            'likesCount' => $this->whenCounted('children'),
         ];
     }
 }

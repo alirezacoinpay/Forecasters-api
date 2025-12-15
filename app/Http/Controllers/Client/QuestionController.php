@@ -13,7 +13,7 @@ class QuestionController extends Controller
     public function __construct(
         protected QuestionRepositoryInterface $repository,
     ) {
-        $this->userId = auth()->user()->getAuthIdentifier() ?? null;
+        $this->userId = auth()->user()?->getAuthIdentifier() ?? null;
     }
 
     public function show($id): JsonResponse

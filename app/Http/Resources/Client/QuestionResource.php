@@ -12,6 +12,7 @@ class QuestionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'text' => $this->text,
             'category_id' => $this->category_id,
@@ -24,7 +25,7 @@ class QuestionResource extends JsonResource
             'userPredictionsCount' => $this->whenCounted('userPredictionsCount'),
             'commentsCount' => $this->whenCounted('commentsCount'),
             'user' => new UserResource($this->whenLoaded('user')),
-            'questionForwards' => $this->whenCounted('questionForwards'),
+            'questionForwardCount' => $this->whenCounted('questionForwards'),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'userPredictions' => CommentResource::collection($this->whenLoaded('userPredictions')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),

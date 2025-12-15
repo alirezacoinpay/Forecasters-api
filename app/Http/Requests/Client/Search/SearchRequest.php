@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Client\Feed;
+namespace App\Http\Requests\Client\Search;
 
 use App\Traits\HasIndexRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class FeedsRequest extends FormRequest
+class SearchRequest extends FormRequest
 {
     use HasIndexRules;
     public function authorize(): bool
@@ -17,7 +17,8 @@ class FeedsRequest extends FormRequest
     public function rules(): array
     {
         return $this->mergeRules([
-            'topic_id' => ['nullable', 'integer', Rule::exists('topics', 'id')],
+            'search' => ['nullable', 'string', 'max:255'],
+            'tag_id' => ['nullable', 'integer', Rule::exists('tags', 'id')],
         ]);
     }
 }

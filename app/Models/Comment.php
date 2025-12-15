@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Comment extends BaseModel
 {
@@ -35,5 +36,15 @@ class Comment extends BaseModel
     public function children(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id');
+    }
+
+    public function commentLikes(): HasMany
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
+    public function usersLikedComment(): HasOneThrough
+    {
+        return $this->hasOneThrough(User::class, CommentLike::class);
     }
 }

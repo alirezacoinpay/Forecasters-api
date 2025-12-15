@@ -12,6 +12,7 @@ class QuestionOptionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'question_id' => $this->question_id,
             'is_true' => $this->is_true,

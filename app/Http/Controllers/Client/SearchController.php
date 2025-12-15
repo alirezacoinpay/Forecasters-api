@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\Feed\FeedsRequest;
+use App\Http\Requests\Client\Search\SearchRequest;
 use App\Http\Resources\Client\QuestionResource;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 
-class FeedController extends Controller
+class SearchController extends Controller
 {
     protected ?int $userId;
     public function __construct(
@@ -18,7 +18,15 @@ class FeedController extends Controller
     }
 
 
-    public function feedPageQuestions(FeedsRequest $request): JsonResponse
+    public function searchHistory(): JsonResponse
+    {
+        //TODO
+
+        return $this->success([]);
+    }
+
+
+    public function search(SearchRequest $request): JsonResponse
     {
         $validated = $request->validated();
         $questions = $this->repository->userFeedQuestions($this->userId, $validated);

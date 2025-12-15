@@ -28,15 +28,6 @@ class TagRepository extends BaseRepository implements TagRepositoryInterface
         $query = $this->model->newQuery();
 
 
-
-        if (isset($params['trashed'])) {
-            if ($params['trashed']) {
-                $query->onlyTrashed();
-            }
-        }else{
-            $query->withTrashed();
-        }
-
         $query->orderBy('id', $params['sort'] ?? 'desc');
         if (!empty($params['paginate'])) {
             return $query->paginate($params['paginate']);

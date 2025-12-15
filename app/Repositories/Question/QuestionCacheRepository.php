@@ -18,7 +18,8 @@ class QuestionCacheRepository extends BaseCacheRepository implements QuestionRep
        'findQuestionOptionByIdLight' => 'single_light_question_option_id_',
        'findByIdLight' => 'single_light_question_id_',
        'findFeedPage' => 'single_feed_page_question_id_',
-       'userFeedQuestions' => 'user_feed_page_questionss_',
+       'userFeedQuestions' => 'user_feed_page_questions_',
+       'userSearchQuestions' => 'user_search_page_questions_',
        'all' => 'all_questionss_',
     ];
 
@@ -97,6 +98,14 @@ class QuestionCacheRepository extends BaseCacheRepository implements QuestionRep
 
         return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId, $params) {
           return  $this->repository->userFeedQuestions($userId, $params);
+        });
+    }
+    public function userSearchQuestions($userId = null, $params = [])
+    {
+        $key = $this->generateKey([$userId = null, $params]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId, $params) {
+          return  $this->repository->userSearchQuestions($userId, $params);
         });
     }
 

@@ -101,12 +101,42 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
     {
         $query = $this->model
             ->newQuery()
-            ->with(['tags', 'user', 'questionOptions' => function ($query) {
+            ->with(['tags', 'user', 'comments', 'questionOptions' => function ($query) {
                 $query->withCount('userPredictions');
             }])
             ->withCount(['comments', 'userPredictions', 'questionForwards']);
 
+        if (isset($params['topic_id'])) {
+            $query->where('topic_id', $params['topic_id']);
+        }
 
+        $query->orderBy('id', $params['sort'] ?? 'desc');
+        if (!empty($params['paginate'])) {
+            return $query->paginate($params['paginate']);
+        }else{
+
+            return $query->get();
+        }
+
+    }
+
+    public function userSearchQuestions($userId = null, $params = [])
+    {
+        $query = $this->model
+            ->newQuery()
+            ->with(['tags', 'user', 'comments', 'questionOptions' => function ($query) {
+                $query->withCount('userPredictions');
+            }])
+            ->withCount(['comments', 'userPredictions', 'questionForwards']);
+
+        //TODO
+        if (isset($params['search'])) {
+            $query->where('text', $params['search']);
+        }
+
+        if (isset($params['tag_id'])) {
+            $query->where('topic_id', $params['topic_id']);
+        }
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
         if (!empty($params['paginate'])) {
