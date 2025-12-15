@@ -13,6 +13,7 @@ class User extends Authenticatable
     public const string TAG = "user";
 
     protected $fillable = [
+        'ip',
         'username',
         'mobile',
         'mobile_verified_at',

@@ -4,17 +4,31 @@ namespace App\Http\Controllers\Client;
 use App\Enums\SmsTemplate;
 use App\Facades\Sms;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\Auth\LoginRequest;
 use App\Http\Requests\Client\Auth\SendOtpRequest;
 use App\Http\Requests\Client\Auth\VerifyOtpRequest;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\Cookie;
+
 
 class AuthController extends Controller
 {
     public function __construct(
         protected UserRepositoryInterface $repository,
     ) {}
+
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $user = $this->repository->create($validated);
+        $token = $user->createToken('clientToken')->plainTextToken;
+
+        $cookie = $this->createCookie($token);
+        return $this->success(['user' => $user], 'api.otp.verified')->withCookie($cookie);
+    }
 
     public function sendOtp(SendOtpRequest $request): JsonResponse
     {
@@ -84,5 +98,20 @@ class AuthController extends Controller
     private function deleteOtp($mobile): void
     {
         Cache::forget($mobile);
+    }
+
+    private function createCookie(string $token): Cookie
+    {
+        return cookie(
+            name: 'auth_user',
+            value: $token,
+            minutes: 60 * 24 * 365,
+            path: '/',
+            domain: null,
+            secure: env('production'),
+            httpOnly: true,
+            raw: false,
+            sameSite: env('production') ? 'None' : 'Lax'
+        );
     }
 }
