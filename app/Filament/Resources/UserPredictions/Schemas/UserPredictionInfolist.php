@@ -5,16 +5,8 @@ namespace App\Filament\Resources\UserPredictions\Schemas;
 use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Html;
-use Filament\Schemas\Components\Icon;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Text;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\Card;
-
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Repeater;
 
 class UserPredictionInfolist
 {

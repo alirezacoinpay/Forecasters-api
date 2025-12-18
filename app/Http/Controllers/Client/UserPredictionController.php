@@ -8,7 +8,6 @@ use App\Http\Requests\Client\UserPredictions\AddUserPredictionRequest;
 use App\Http\Requests\Client\UserPredictions\AllUserPredictionsRequest;
 use App\Http\Requests\Client\UserPredictions\UpdateUserPredictionRequest;
 use App\Http\Resources\Client\UserPredictionResource;
-use App\Models\Banner;
 use App\Models\Comment;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use App\Repositories\Prediction\PredictionRepositoryInterface;
