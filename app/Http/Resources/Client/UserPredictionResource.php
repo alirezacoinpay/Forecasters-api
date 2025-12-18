@@ -12,14 +12,14 @@ class UserPredictionResource extends JsonResource
     {
         return [
             'user_id' => $this->user_id,
-            'question_option_id' => $this->question_option_id,
+            'prediction_option_id' => $this->prediction_option_id,
             'percentage' => $this->percentage,
             'likesCount' => $this->whenCounted('predictionLikes'),
             'isLiked' => $this->whenLoaded('myPredictionLike', function () {
                 return $this->myPredictionLike !== null;
             }),
-            'question' => new QuestionResource($this->whenLoaded('question')),
-            'questionOption' => new QuestionOptionResource($this->whenLoaded('question')),
+            'prediction' => new PredictionResource($this->whenLoaded('prediction')),
+            'predictionOption' => new PredictionOptionResource($this->whenLoaded('predictionOption')),
         ];
     }
 }

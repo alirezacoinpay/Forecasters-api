@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
 
-            $table->unsignedBigInteger('question_id');
-            $table->foreign('question_id')->references('id')->on('questions')->cascadeOnDelete();
+            $table->unsignedBigInteger('prediction_id');
+            $table->foreign('prediction_id')->references('id')->on('predictions')->cascadeOnDelete();
 
         });
     }
@@ -26,8 +26,8 @@ return new class extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
 
-            $table->dropForeign('comments_question_id_foreign');
-            $table->dropColumn('question_id');
+            $table->dropForeign('comments_prediction_id_foreign');
+            $table->dropColumn('prediction_id');
         });
     }
 };

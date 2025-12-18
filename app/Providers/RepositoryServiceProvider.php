@@ -11,12 +11,12 @@ use App\Repositories\{
     Comment\CommentCacheRepository,
     Comment\CommentRepository,
     Comment\CommentRepositoryInterface,
-    QuestionForward\QuestionForwardCacheRepository,
-    QuestionForward\QuestionForwardRepository,
-    QuestionForward\QuestionForwardRepositoryInterface,
-    Question\QuestionCacheRepository,
-    Question\QuestionRepository,
-    Question\QuestionRepositoryInterface,
+    PredictionForward\PredictionForwardCacheRepository,
+    PredictionForward\PredictionForwardRepository,
+    PredictionForward\PredictionForwardRepositoryInterface,
+    Prediction\PredictionCacheRepository,
+    Prediction\PredictionRepository,
+    Prediction\PredictionRepositoryInterface,
     Tag\TagCacheRepository,
     Tag\TagRepository,
     Tag\TagRepositoryInterface,
@@ -41,7 +41,8 @@ class RepositoryServiceProvider extends ServiceProvider
         if (env('DATABASE_CACHE', true)) {
             $this->bindRepository(CategoryRepositoryInterface::class, CategoryRepository::class, CategoryCacheRepository::class);
             $this->bindRepository(CommentRepositoryInterface::class, CommentRepository::class, CommentCacheRepository::class);
-            $this->bindRepository(QuestionRepositoryInterface::class, QuestionRepository::class, QuestionCacheRepository::class);
+            $this->bindRepository(PredictionRepositoryInterface::class, PredictionRepository::class, PredictionCacheRepository::class);
+            $this->bindRepository(PredictionForwardRepositoryInterface::class, PredictionForwardRepository::class, PredictionForwardCacheRepository::class);
             $this->bindRepository(TagRepositoryInterface::class, TagRepository::class, TagCacheRepository::class);
             $this->bindRepository(TopicRepositoryInterface::class, TopicRepository::class, TopicCacheRepository::class);
             $this->bindRepository(UserPredictionRepositoryInterface::class, UserPredictionRepository::class, UserPredictionCacheRepository::class);
@@ -49,7 +50,8 @@ class RepositoryServiceProvider extends ServiceProvider
         }else{
             $this->bindRepository(CategoryRepositoryInterface::class, CategoryRepository::class, CategoryRepository::class);
             $this->bindRepository(CommentRepositoryInterface::class, CommentRepository::class, CommentRepository::class);
-            $this->bindRepository(QuestionRepositoryInterface::class, QuestionRepository::class, QuestionRepository::class);
+            $this->bindRepository(PredictionRepositoryInterface::class, PredictionRepository::class, PredictionRepository::class);
+            $this->bindRepository(PredictionForwardRepositoryInterface::class, PredictionForwardRepository::class, PredictionForwardRepository::class);
             $this->bindRepository(TagRepositoryInterface::class, TagRepository::class, TagRepository::class);
             $this->bindRepository(TopicRepositoryInterface::class, TopicRepository::class, TopicRepository::class);
             $this->bindRepository(UserPredictionRepositoryInterface::class, UserPredictionRepository::class, UserPredictionRepository::class);

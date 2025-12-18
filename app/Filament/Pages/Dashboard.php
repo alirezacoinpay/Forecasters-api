@@ -3,8 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Enums\DatePeriod;
-use App\Filament\Resources\Questions\Widgets\UserPredictionChart;
-use App\Filament\Resources\Questions\Widgets\UserPredictionOverTimeChart;
+use App\Filament\Resources\Predictions\Widgets\UserPredictionChart;
+use App\Filament\Resources\Predictions\Widgets\UserPredictionOverTimeChart;
 use App\Filament\Widgets\UserPredictionsChart;
 use App\Filament\Widgets\UserPredictionsLast7DaysChart;
 use Filament\Forms\Components\Select;

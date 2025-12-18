@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Comment;
 use App\Models\User;
-use App\Models\Question;
+use App\Models\Prediction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class CommentFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'question_id' => Question::factory(),
+            'prediction_id' => Prediction::factory(),
             'parent_id' => null,
             'text' => fake()->paragraph(),
             'file' => null,
@@ -29,7 +29,7 @@ class CommentFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'parent_id' => $parent->id,
-            'question_id' => $parent->question_id,
+            'prediction_id' => $parent->prediction_id,
         ]);
     }
 }

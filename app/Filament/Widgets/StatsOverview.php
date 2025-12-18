@@ -3,7 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\User;
-use App\Models\Question;
+use App\Models\Prediction;
 use App\Models\Comment;
 use App\Models\UserPrediction;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -23,9 +23,9 @@ class StatsOverview extends BaseWidget
                 ->icon('heroicon-o-user-group')
                 ->color('success'),
 
-            Stat::make('Questions', Question::count())
-                ->description("Questions total ")
-                ->icon('heroicon-o-question-mark-circle')
+            Stat::make('Predictions', Prediction::count())
+                ->description("Predictions total ")
+                ->icon('heroicon-o-chart-bar')
                 ->color('info'),
 
             Stat::make('Comments', Comment::count())

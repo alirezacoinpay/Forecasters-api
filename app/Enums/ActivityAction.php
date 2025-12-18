@@ -11,11 +11,11 @@ enum ActivityAction: string
     case FEED_SCROLL = 'feed_scroll';
     case FEED_TIME_SPENT = 'feed_time_spent';
 
-    // === QUESTION INTERACTIONS ===
-    case QUESTION_IMPRESSION = 'question_impression';     // 70%+ in viewport
-    case QUESTION_VIEW = 'question_view';                 // full page open
-    case QUESTION_TIME_SPENT = 'question_time_spent';     // seconds
-    case QUESTION_FULLY_WATCHED = 'question_fully_watched'; // if long content
+    // === PREDICTION INTERACTIONS ===
+    case PREDICTION_IMPRESSION = 'prediction_impression';     // 70%+ in viewport
+    case PREDICTION_VIEW = 'prediction_view';                 // full page open
+    case PREDICTION_TIME_SPENT = 'prediction_time_spent';     // seconds
+    case PREDICTION_FULLY_WATCHED = 'prediction_fully_watched'; // if long content
 
     // === PREDICTION (your core action) ===
     case PREDICT = 'predict';
@@ -42,10 +42,10 @@ enum ActivityAction: string
     case SEARCH_QUERY = 'search_query';
 
     // === CONTENT CREATION ===
-    case QUESTION_CREATE = 'question_create';
-    case QUESTION_EDIT = 'question_edit';
-    case QUESTION_PUBLISH = 'question_publish';
-    case QUESTION_DELETE = 'question_delete';
+    case PREDICTION_CREATE = 'prediction_create';
+    case PREDICTION_EDIT = 'prediction_edit';
+    case PREDICTION_PUBLISH = 'prediction_publish';
+    case PREDICTION_DELETE = 'prediction_delete';
 
     // === NOTIFICATIONS ===
     case NOTIFICATION_VIEW = 'notification_view';
@@ -68,7 +68,7 @@ enum ActivityAction: string
     {
         return match ($this) {
             self::FEED_VIEW => 'Feed Viewed',
-            self::QUESTION_IMPRESSION => 'Question Shown',
+            self::PREDICTION_IMPRESSION => 'Prediction Shown',
             self::PREDICT => 'Made a Prediction',
             self::LIKE => 'Liked',
             self::SHARE => 'Shared',
@@ -89,10 +89,10 @@ enum ActivityAction: string
             self::PREDICT,//
             self::PREDICTION_CHANGE,//
             self::SHARE,//
-            self::QUESTION_CREATE,//
-            self::QUESTION_PUBLISH,
-            self::QUESTION_EDIT,//
-            self::QUESTION_DELETE,//
+            self::PREDICTION_CREATE,//
+            self::PREDICTION_PUBLISH,
+            self::PREDICTION_EDIT,//
+            self::PREDICTION_DELETE,//
             self::FOLLOW_USER,
             self::UNFOLLOW_USER,
         ];
@@ -103,10 +103,10 @@ enum ActivityAction: string
             self::FEED_VIEW,
             self::FEED_SCROLL,
             self::FEED_TIME_SPENT,
-            self::QUESTION_IMPRESSION,
-            self::QUESTION_VIEW,
-            self::QUESTION_TIME_SPENT,
-            self::QUESTION_FULLY_WATCHED,
+            self::PREDICTION_IMPRESSION,
+            self::PREDICTION_VIEW,
+            self::PREDICTION_TIME_SPENT,
+            self::PREDICTION_FULLY_WATCHED,
             self::PREDICTION_CONFIDENCE,
             self::PROFILE_VISIT,
             self::TAG_CLICK,
@@ -132,10 +132,10 @@ enum ActivityAction: string
             self::FEED_SCROLL,
             self::FEED_TIME_SPENT => 'feed',
 
-            self::QUESTION_IMPRESSION,
-            self::QUESTION_VIEW,
-            self::QUESTION_TIME_SPENT,
-            self::QUESTION_FULLY_WATCHED => 'question_view',
+            self::PREDICTION_IMPRESSION,
+            self::PREDICTION_VIEW,
+            self::PREDICTION_TIME_SPENT,
+            self::PREDICTION_FULLY_WATCHED => 'prediction_view',
 
             self::PREDICT,
             self::PREDICTION_CHANGE,
@@ -157,10 +157,10 @@ enum ActivityAction: string
             self::TAG_SEARCH,
             self::SEARCH_QUERY => 'discovery',
 
-            self::QUESTION_CREATE,
-            self::QUESTION_EDIT,
-            self::QUESTION_PUBLISH,
-            self::QUESTION_DELETE => 'content_creation',
+            self::PREDICTION_CREATE,
+            self::PREDICTION_EDIT,
+            self::PREDICTION_PUBLISH,
+            self::PREDICTION_DELETE => 'content_creation',
 
             self::NOTIFICATION_VIEW,
             self::NOTIFICATION_CLICK => 'notification',

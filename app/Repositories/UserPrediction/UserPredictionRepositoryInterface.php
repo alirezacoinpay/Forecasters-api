@@ -6,6 +6,6 @@ use App\Repositories\BaseRepositoryInterface;
 
 interface UserPredictionRepositoryInterface extends BaseRepositoryInterface
 {
-    public function togglePredictionLike($questionId, $userId);
+    public function togglePredictionLike($predictionId, $userId);
     public function findByIdWithLikes($id, $userId = null);
 }

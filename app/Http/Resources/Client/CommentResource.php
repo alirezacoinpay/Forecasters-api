@@ -14,11 +14,11 @@ class CommentResource extends JsonResource
         return [
             'user_id' => $this->user_id,
             'parent_id' => $this->parent_id,
-            'question_id' => $this->question_id,
+            'prediction_id' => $this->prediction_id,
             'text' => $this->text,
             'file' => $this->file,
             'time_past' => DateHelper::shortTimeAgo($this->created_at),
-            'question' => new QuestionResource($this->whenLoaded('question')),
+            'prediction' => new PredictionResource($this->whenLoaded('prediction')),
             'user' => new UserResource($this->whenLoaded('user')),
             'parent' => new CommentResource($this->whenLoaded('parent')),
             'children' => CommentResource::collection($this->whenLoaded('children')),

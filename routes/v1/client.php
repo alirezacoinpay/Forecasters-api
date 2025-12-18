@@ -3,7 +3,7 @@ use App\Http\Controllers\Client\{
     CategoryController,
     TopicController,
     TagController,
-    QuestionController,
+    PredictionController,
     CommentController,
     CommentLikeController,
     UserPredictionController,
@@ -11,7 +11,7 @@ use App\Http\Controllers\Client\{
     AuthController,
     UserController,
     ActivityController,
-    QuestionForwardController,
+    PredictionForwardController,
     FeedController,
     SearchController,
 };
@@ -27,11 +27,11 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
 
 
     Route::controller(FeedController::class)->group( function () {
-        Route::get('/question-feed', 'feedPageQuestions');
+        Route::get('/prediction-feed', 'feedPagePredictions');
     });
 
-    Route::controller(QuestionController::class)->group( function () {
-        Route::get('/questions/{id}', 'show');
+    Route::controller(PredictionController::class)->group( function () {
+        Route::get('/predictions/{id}', 'show');
     });
 
     Route::controller(TopicController::class)->group( function () {
@@ -83,8 +83,8 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
         Route::post('/prediction-likes/{id}/toggle', 'toggle');
     });
 
-    Route::controller(QuestionForwardController::class)->group( function () {
-        Route::post('/question-forwards', 'store');
+    Route::controller(PredictionForwardController::class)->group( function () {
+        Route::post('/prediction-forwards', 'store');
     });
 
     Route::post('/activity', ActivityController::class)->middleware('throttle:60,1');

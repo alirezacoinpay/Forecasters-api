@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('percentage');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->unsignedBigInteger('question_option_id');
-            $table->foreign('question_option_id')->references('id')->on('question_options')->cascadeOnDelete();
+            $table->unsignedBigInteger('prediction_option_id');
+            $table->foreign('prediction_option_id')->references('id')->on('prediction_options')->cascadeOnDelete();
             $table->timestamps();
         });
     }

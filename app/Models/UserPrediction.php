@@ -16,7 +16,7 @@ class UserPrediction extends BaseModel
 
     protected $fillable = [
         'user_id',
-        'question_option_id',
+        'prediction_option_id',
         'percentage',
     ];
 
@@ -25,20 +25,20 @@ class UserPrediction extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function questionOption(): BelongsTo
+    public function predictionOption(): BelongsTo
     {
-        return $this->belongsTo(QuestionOption::class);
+        return $this->belongsTo(PredictionOption::class);
     }
 
-    public function question(): HasOneThrough
+    public function prediction(): HasOneThrough
     {
         return $this->hasOneThrough(
-            Question::class,
-            QuestionOption::class,
+            Prediction::class,
+            PredictionOption::class,
             'id',
             'id',
-            'question_option_id',
-            'question_id'
+            'prediction_option_id',
+            'prediction_id'
         );
     }
 
@@ -56,7 +56,7 @@ class UserPrediction extends BaseModel
     {
         return $this->hasOne(PredictionLike::class)->where('user_id', auth()->id());
     }
-    public function calculatePoints($question, $correctPredictionsCount): int
+    public function calculatePoints($prediction, $correctPredictionsCount): int
     {
         // -----------------------------------------------------------------
         // 1. Load config
@@ -72,7 +72,7 @@ class UserPrediction extends BaseModel
         $factorMinScore  = Config::get('forecast_points.factor_min_score', 1.0);
         $penaltyScore  = Config::get('forecast_points.penalty_score', -2.0);
 
-          /*  that is a number that by that count of forecasters participating in this question
+          /*  that is a number that by that count of forecasters participating in this prediction
             the point of populations get at half of the max point and
             when 10x of that count participating the point goes up to 90% of the maximum point and
             when 100X of that count participating the point goes up to 99% of the maximum point
@@ -93,15 +93,15 @@ class UserPrediction extends BaseModel
         // -----------------------------------------------------------------
         // 2. Wrong answer → 0
         // -----------------------------------------------------------------
-        if ($this->question_option_id != $question->questionTrueOption->id) {
+        if ($this->prediction_option_id != $prediction->predictionTrueOption->id) {
             return $penaltyScore;
         }
 
         // -----------------------------------------------------------------
         // 3. TIME FACTOR
         // -----------------------------------------------------------------
-        $resolveDate = Carbon::make($question->resolve_at);
-        $totalHours  = $resolveDate->diffInHours($question->starts_at);
+        $resolveDate = Carbon::make($prediction->resolve_at);
+        $totalHours  = $resolveDate->diffInHours($prediction->starts_at);
         $leftHours   = $resolveDate->diffInHours($this->forecasted_at ?? $this->updated_at);
         if ($leftHours == 0) {
             $timeScore = $factorMinScore;
@@ -117,7 +117,7 @@ class UserPrediction extends BaseModel
         // -----------------------------------------------------------------
         // 4. DIFFICULTY FACTOR
         // -----------------------------------------------------------------
-        $totalForecastCount = $question->userPredictions->count();
+        $totalForecastCount = $prediction->userPredictions->count();
         $difficultyScore  = $factorMinScore;
 
         if ($totalForecastCount > 0) {

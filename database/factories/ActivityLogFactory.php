@@ -20,7 +20,7 @@ class ActivityLogFactory extends Factory
             'user_id' => User::factory(),
             'action' => fake()->randomElement(ActivityAction::cases()),
             'subject_id' => 1,
-            'subject_type' => 'App\Models\Question',
+            'subject_type' => 'App\Models\Prediction',
             'metadata' => [],
             'session_id' => fake()->uuid(),
             'device_type' => fake()->randomElement(['mobile', 'desktop', 'tablet']),

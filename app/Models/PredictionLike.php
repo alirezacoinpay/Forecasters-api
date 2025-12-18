@@ -9,7 +9,7 @@ class PredictionLike extends BaseModel
 
     protected $fillable = [
         'user_id',
-        'question_id',
+        'prediction_id',
     ];
 
     public function user(): BelongsTo
@@ -17,9 +17,9 @@ class PredictionLike extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function question(): BelongsTo
+    public function prediction(): BelongsTo
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Prediction::class);
     }
 }
 

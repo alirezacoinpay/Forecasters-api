@@ -17,8 +17,8 @@ class Topic extends BaseModel
 
     public $timestamps = false;
 
-    public function question(): HasMany
+    public function predictions(): HasMany
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Prediction::class);
     }
 }

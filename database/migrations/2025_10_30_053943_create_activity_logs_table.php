@@ -18,10 +18,10 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->index()->constrained()->onDelete('set null');
 
             // What happened?
-            $table->string('action', 50)->index(); // 'view_question', 'predict', 'like', 'scroll'
+            $table->string('action', 50)->index(); // 'view_prediction', 'predict', 'like', 'scroll'
 
             // On what?
-            $table->nullableMorphs('subject'); // subject_id + subject_type (question, comment, tag, user)
+            $table->nullableMorphs('subject'); // subject_id + subject_type (prediction, comment, tag, user)
 
             // Extra context (flexible!)
             $table->json('metadata')->nullable();

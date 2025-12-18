@@ -13,8 +13,8 @@ class Tag extends BaseModel
 
     public $timestamps = false;
 
-    public function question(): HasManyThrough
+    public function predictions(): HasManyThrough
     {
-        return $this->hasManyThrough(Question::class, QuestionTag::class);
+        return $this->hasManyThrough(Prediction::class, PredictionTag::class);
     }
 }

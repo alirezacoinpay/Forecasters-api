@@ -53,10 +53,10 @@ class UserPredictionCacheRepository extends BaseCacheRepository implements UserP
         });
     }
 
-    public function togglePredictionLike($questionId, $userId)
+    public function togglePredictionLike($predictionId, $userId)
     {
         // Don't cache toggle operations - they modify data
-        return $this->repository->togglePredictionLike($questionId, $userId);
+        return $this->repository->togglePredictionLike($predictionId, $userId);
     }
 
     public function findByIdWithLikes($id, $userId = null)

@@ -24,7 +24,7 @@ class UserPredictionsTable
                     ->searchable(),
                 TextColumn::make('percentage')
                     ->hidden(),
-                TextColumn::make('questionOption.question.title'),
+                TextColumn::make('predictionOption.prediction.title'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->jalaliDateTime()
@@ -42,9 +42,9 @@ class UserPredictionsTable
                             ->when($data['from'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
                             ->when($data['until'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
                     }),
-                SelectFilter::make('question_id')
-                    ->label('Question')
-                    ->relationship('question', 'title')
+                SelectFilter::make('prediction_id')
+                    ->label('Prediction')
+                    ->relationship('prediction', 'title')
                     ->searchable()
                     ->preload()
                     ->native(false),

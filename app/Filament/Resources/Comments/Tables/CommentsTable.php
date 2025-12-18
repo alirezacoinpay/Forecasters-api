@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Comments\Tables;
 
-use App\Models\Question;
+use App\Models\Prediction;
 use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -24,7 +24,7 @@ class CommentsTable
                 TextColumn::make('file'),
                 TextColumn::make('user.mobile')
                     ->searchable(),
-                TextColumn::make('question.title'),
+                TextColumn::make('prediction.title'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->jalaliDateTime()
@@ -39,9 +39,9 @@ class CommentsTable
                     ->preload()
                     ->native(false),
 
-                SelectFilter::make('question_id')
-                    ->label('Question')
-                    ->relationship('question', 'title')
+                SelectFilter::make('prediction_id')
+                    ->label('Prediction')
+                    ->relationship('prediction', 'title')
                     ->searchable()
                     ->preload()
                     ->native(false),

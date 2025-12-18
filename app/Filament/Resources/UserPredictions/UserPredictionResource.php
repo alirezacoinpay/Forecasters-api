@@ -41,7 +41,7 @@ class UserPredictionResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['question', 'question.questionOptions']);
+            ->with(['prediction', 'prediction.predictionOptions']);
     }
 
     protected static ?string $recordTitleAttribute = 'Prediction';

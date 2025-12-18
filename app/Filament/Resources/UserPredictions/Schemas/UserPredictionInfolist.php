@@ -21,7 +21,7 @@ class UserPredictionInfolist
 
     public static function configure(Schema $schema): Schema
     {
-        $userPredictionQuestionOptionId = $schema->model->id;
+        $userPredictionPredictionOptionId = $schema->model->id;
         return $schema
             ->components([
                 Section::make('Details')
@@ -39,20 +39,20 @@ class UserPredictionInfolist
                             ->placeholder('-'),
                     ]),
 
-                Section::make('Question')
+                Section::make('Prediction')
                     ->schema([
 
-                        TextEntry::make('question.title')
+                        TextEntry::make('prediction.title')
                         ->hiddenLabel(),
-                        RepeatableEntry::make('question.questionOptions')
+                        RepeatableEntry::make('prediction.predictionOptions')
                             ->hiddenLabel()
                             ->table([
                                 RepeatableEntry\TableColumn::make('title'),
                             ])
                             ->schema([
                                 TextEntry::make('title')
-                                    ->color(function ($record) use ($userPredictionQuestionOptionId) {
-                                        return $record->id === $userPredictionQuestionOptionId
+                                    ->color(function ($record) use ($userPredictionPredictionOptionId) {
+                                        return $record->id === $userPredictionPredictionOptionId
                                             ? 'warning'
                                             : 'secondary';
                                     })

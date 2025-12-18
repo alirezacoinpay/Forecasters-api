@@ -17,8 +17,8 @@ class UserPredictionForm
                 Select::make('user_id')
                     ->relationship('user', 'id')
                     ->required(),
-                Select::make('question_option_id')
-                    ->relationship('questionOption', 'title')
+                Select::make('prediction_option_id')
+                    ->relationship('predictionOption', 'title')
                     ->required(),
             ]);
     }

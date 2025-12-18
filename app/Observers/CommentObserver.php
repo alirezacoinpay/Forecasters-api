@@ -23,7 +23,7 @@ class CommentObserver
         ActivityLogger::log(
             $comment->user_id,
             ActivityAction::COMMENT,
-            $comment->question
+            $comment->prediction
         );
     }
 

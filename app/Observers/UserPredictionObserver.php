@@ -16,7 +16,7 @@ class UserPredictionObserver
         ActivityLogger::log(
             $userPrediction->user_id,
             ActivityAction::PREDICT,
-            $userPrediction->question
+            $userPrediction->prediction
         );
     }
 
@@ -28,7 +28,7 @@ class UserPredictionObserver
         ActivityLogger::log(
             $userPrediction->user_id,
             ActivityAction::PREDICTION_CHANGE,
-            $userPrediction->question
+            $userPrediction->prediction
         );
     }
 

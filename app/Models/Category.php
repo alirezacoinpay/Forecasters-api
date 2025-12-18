@@ -14,8 +14,8 @@ class Category extends BaseModel
 
     public $timestamps = false;
 
-    public function questions(): HasMany
+    public function predictions(): HasMany
     {
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Prediction::class);
     }
 }

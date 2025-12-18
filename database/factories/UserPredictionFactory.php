@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\UserPrediction;
 use App\Models\User;
-use App\Models\QuestionOption;
+use App\Models\PredictionOption;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class UserPredictionFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'question_option_id' => QuestionOption::factory(),
+            'prediction_option_id' => PredictionOption::factory(),
             'percentage' => fake()->numberBetween(0, 100),
         ];
     }

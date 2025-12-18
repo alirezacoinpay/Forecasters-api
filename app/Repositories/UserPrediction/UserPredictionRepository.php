@@ -60,15 +60,15 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     }
 
-    public function togglePredictionLike($questionId, $userId)
+    public function togglePredictionLike($predictionId, $userId)
     {
-        $prediction = $this->model->find($questionId);
+        $prediction = \App\Models\Prediction::find($predictionId);
 
         if (!$prediction) {
             return null;
         }
 
-        $existingLike = PredictionLike::where('question_id', $questionId)
+        $existingLike = PredictionLike::where('prediction_id', $predictionId)
             ->where('user_id', $userId)
             ->first();
 
@@ -77,7 +77,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
             return false; // Unliked
         } else {
             PredictionLike::create([
-                'question_id' => $questionId,
+                'prediction_id' => $predictionId,
                 'user_id' => $userId,
             ]);
             return true; // Liked

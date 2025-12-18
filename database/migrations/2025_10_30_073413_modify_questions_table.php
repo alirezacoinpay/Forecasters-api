@@ -9,7 +9,7 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::table('questions', function (Blueprint $table) {
+        Schema::table('predictions', function (Blueprint $table) {
 
             $table->unsignedBigInteger('user_id')->change()->nullable();
         });
@@ -17,7 +17,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('questions', function (Blueprint $table) {
+        Schema::table('predictions', function (Blueprint $table) {
 
             $table->unsignedBigInteger('user_id')->change()->nullable(false);
         });

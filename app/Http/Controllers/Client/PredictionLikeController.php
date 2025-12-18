@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Enums\ActivityAction;
 use App\Http\Controllers\Controller;
-use App\Repositories\Question\QuestionRepositoryInterface;
+use App\Repositories\Prediction\PredictionRepositoryInterface;
 use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
 use App\Services\ActivityLogger\ActivityLogger;
 use Illuminate\Http\JsonResponse;
@@ -13,7 +13,7 @@ class PredictionLikeController extends Controller
 {
     public function __construct(
         protected UserPredictionRepositoryInterface $repository,
-        protected QuestionRepositoryInterface $questionRepository,
+        protected PredictionRepositoryInterface $predictionRepository,
     ) {}
 
     public function toggle($id): JsonResponse
@@ -24,10 +24,10 @@ class PredictionLikeController extends Controller
             return $this->error('api.unauthorized', [], 401);
         }
 
-        $question = $this->questionRepository->findByIdLight($id);
+        $prediction = $this->predictionRepository->findByIdLight($id);
 
-        if (!$question) {
-            return $this->error('api.not_found.userPrediction', [], 404);
+        if (!$prediction) {
+            return $this->error('api.not_found.prediction', [], 404);
         }
 
         $isLiked = $this->repository->togglePredictionLike($id, $userId);
@@ -39,7 +39,7 @@ class PredictionLikeController extends Controller
         ActivityLogger::log(
             $userId,
             $isLiked ? ActivityAction::PREDICTION_LIKE : ActivityAction::UNLIKE,
-            $question
+            $prediction
         );
 
         $message = $isLiked ? 'api.liked.prediction' : 'api.unliked.prediction';

@@ -14,7 +14,7 @@ class TagResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'color' => $this->color,
-            'questions' => QuestionResource::collection($this->whenLoaded('questions')),
+            'predictions' => PredictionResource::collection($this->whenLoaded('predictions')),
         ];
     }
 }

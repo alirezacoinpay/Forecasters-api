@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\PredictionLike;
 use App\Models\User;
-use App\Models\UserPrediction;
+use App\Models\Prediction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class PredictionLikeFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'question_id' => UserPrediction::factory(),
+            'prediction_id' => Prediction::factory(),
         ];
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Client\UserPredictions;
 
-use App\Models\Question;
+use App\Models\Prediction;
 use App\Traits\HasIndexRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -18,7 +18,7 @@ class AllUserPredictionsRequest extends FormRequest
     public function rules(): array
     {
         return $this->mergeRules([
-            'question_id' => ['nullable', 'integer', Rule::exists(Question::class, 'id')],
+            'prediction_id' => ['nullable', 'integer', Rule::exists(Prediction::class, 'id')],
         ]);
     }
 }

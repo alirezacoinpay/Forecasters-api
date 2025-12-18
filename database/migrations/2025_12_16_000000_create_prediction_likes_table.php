@@ -17,10 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->unsignedBigInteger('question_id');
-            $table->foreign('question_id')->references('id')->on('questions');
+            $table->unsignedBigInteger('prediction_id');
+            $table->foreign('prediction_id')->references('id')->on('predictions');
 
-            $table->unique(['user_id', 'question_id']);
+            $table->unique(['user_id', 'prediction_id']);
             $table->timestamps();
         });
     }

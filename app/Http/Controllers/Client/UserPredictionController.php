@@ -11,7 +11,7 @@ use App\Http\Resources\Client\UserPredictionResource;
 use App\Models\Banner;
 use App\Models\Comment;
 use App\Repositories\Comment\CommentRepositoryInterface;
-use App\Repositories\Question\QuestionRepositoryInterface;
+use App\Repositories\Prediction\PredictionRepositoryInterface;
 use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +21,7 @@ class UserPredictionController extends Controller
     public function __construct(
         protected UserPredictionRepositoryInterface $repository,
         protected CommentRepositoryInterface $commentRepository,
-        protected QuestionRepositoryInterface $questionRepository,
+        protected PredictionRepositoryInterface $predictionRepository,
     ) {
     }
 
@@ -46,22 +46,22 @@ class UserPredictionController extends Controller
     {
         $validated = $request->validated();
 
-        $questionOption = $this->questionRepository->findQuestionOptionByIdLight($validated['question_option_id']);
+        $predictionOption = $this->predictionRepository->findPredictionOptionByIdLight($validated['prediction_option_id']);
 
-        if (!$questionOption) {
+        if (!$predictionOption) {
 
-            return $this->error('api.questionOption.not_found', [], 404);
+            return $this->error('api.predictionOption.not_found', [], 404);
         }
         $user = Auth::user();
         $userPrediction = $this->repository->create([
             'user_id' => $user->getAuthIdentifier(),
-            'question_option_id' => $questionOption->id,
+            'prediction_option_id' => $predictionOption->id,
             'percentage' => 100,
         ]);
         if (!empty($validated['comment'])) {
             $commentData = [
                 'user_id' => $user->getAuthIdentifier(),
-                'question_id' => $questionOption->question_id,
+                'prediction_id' => $predictionOption->prediction_id,
                 'text' => $validated['comment']['text'],
             ];
             if (isset($validated['comment']['file'])) {

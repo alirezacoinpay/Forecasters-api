@@ -14,7 +14,7 @@ class CategoryResource extends JsonResource
             'title' => $this->title,
             'icon' => $this->icon,
             'status' => $this->status,
-            'questions' => QuestionResource::collection($this->whenLoaded('questions')),
+            'predictions' => PredictionResource::collection($this->whenLoaded('predictions')),
         ];
     }
 }

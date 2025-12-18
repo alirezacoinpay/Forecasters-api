@@ -16,7 +16,7 @@ class UpdateCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_id' => ['nullable', 'integer', Rule::exists('questions', 'id')],
+            'prediction_id' => ['nullable', 'integer', Rule::exists('predictions', 'id')],
             'parent_id' => ['nullable', 'integer', Rule::exists('comments', 'id')],
             'text' => ['nullable', 'string'],
             'file' => ['nullable', 'file', 'mimes:pdf,image,doc', 'max:10000'],

@@ -14,7 +14,7 @@ class Comment extends BaseModel
     protected $fillable = [
         'user_id',
         'parent_id',
-        'question_id',
+        'prediction_id',
         'text',
         'file',
     ];
@@ -24,9 +24,9 @@ class Comment extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function question(): BelongsTo
+    public function prediction(): BelongsTo
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Prediction::class);
     }
 
     public function parent(): BelongsTo
