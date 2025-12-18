@@ -25,10 +25,9 @@ class UserFactory extends Factory
     {
         return [
             'username' => fake()->name(),
-            'mobile' => fake()->unique()->safeEmail(),
+            'mobile' => fake()->unique()->numerify('09#########'),
             'mobile_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('12345678'),
-            'remember_token' => Str::random(10),
+            'ip' => fake()->ipv4(),
         ];
     }
 

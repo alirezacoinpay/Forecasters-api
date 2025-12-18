@@ -15,6 +15,7 @@ class UserPredictionCacheRepository extends BaseCacheRepository implements UserP
     protected array $prefixes = [
        'findById' => 'single_userprediction_id_',
        'findByIdLight' => 'single_light_userprediction_id_',
+       'findByIdWithLikes' => 'single_userprediction_with_likes_id_',
        'all' => 'all_userpredictionss_',
     ];
 
@@ -49,6 +50,21 @@ class UserPredictionCacheRepository extends BaseCacheRepository implements UserP
 
         return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($params) {
           return  $this->repository->all($params);
+        });
+    }
+
+    public function togglePredictionLike($predictionId, $userId)
+    {
+        // Don't cache toggle operations - they modify data
+        return $this->repository->togglePredictionLike($predictionId, $userId);
+    }
+
+    public function findByIdWithLikes($id, $userId = null)
+    {
+        $key = $this->generateKey([$id, $userId]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($id, $userId) {
+           return $this->repository->findByIdWithLikes($id, $userId);
         });
     }
 

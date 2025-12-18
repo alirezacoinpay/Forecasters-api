@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers\Client;
+
+use App\Enums\ActivityAction;
+use App\Http\Controllers\Controller;
+use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
+use App\Services\ActivityLogger\ActivityLogger;
+use Illuminate\Http\JsonResponse;
+
+class PredictionLikeController extends Controller
+{
+    public function __construct(
+        protected UserPredictionRepositoryInterface $repository,
+    ) {}
+
+    public function toggle($id): JsonResponse
+    {
+        $userId = auth()->id();
+
+        if (!$userId) {
+            return $this->error('api.unauthorized', [], 401);
+        }
+
+        $prediction = $this->repository->findByIdLight($id);
+
+        if (!$prediction) {
+            return $this->error('api.not_found.userPrediction', [], 404);
+        }
+
+        $isLiked = $this->repository->togglePredictionLike($id, $userId);
+
+        if ($isLiked === null) {
+            return $this->error('api.error.like_toggle', [], 500);
+        }
+
+        // Log activity
+        ActivityLogger::log(
+            $userId,
+            $isLiked ? ActivityAction::PREDICTION_LIKE : ActivityAction::UNLIKE,
+            $prediction
+        );
+
+        $message = $isLiked ? 'api.liked.prediction' : 'api.unliked.prediction';
+
+        return $this->success(['is_liked' => $isLiked], $message);
+    }
+}
+

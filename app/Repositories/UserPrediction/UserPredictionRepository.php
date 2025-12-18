@@ -3,6 +3,7 @@
 namespace App\Repositories\UserPrediction;
 
 use App\Models\UserPrediction;
+use App\Models\PredictionLike;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,19 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     public function findById($id)
     {
-        return $this->model->withTrashed()->find($id);
+        $query = $this->model->withTrashed();
+        
+        if (auth()->check()) {
+            $userId = auth()->id();
+            $query->withCount('predictionLikes')
+                  ->with(['myPredictionLike' => function ($q) use ($userId) {
+                      $q->where('user_id', $userId);
+                  }]);
+        } else {
+            $query->withCount('predictionLikes');
+        }
+        
+        return $query->find($id);
     }
 
 
@@ -45,6 +58,44 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
             return $query->get();
         }
 
+    }
+
+    public function togglePredictionLike($predictionId, $userId)
+    {
+        $prediction = $this->model->find($predictionId);
+        
+        if (!$prediction) {
+            return null;
+        }
+
+        $existingLike = PredictionLike::where('user_prediction_id', $predictionId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+            return false; // Unliked
+        } else {
+            PredictionLike::create([
+                'user_prediction_id' => $predictionId,
+                'user_id' => $userId,
+            ]);
+            return true; // Liked
+        }
+    }
+
+    public function findByIdWithLikes($id, $userId = null)
+    {
+        $query = $this->model->withTrashed()
+            ->withCount('predictionLikes');
+
+        if ($userId) {
+            $query->with(['myPredictionLike' => function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            }]);
+        }
+
+        return $query->find($id);
     }
 
 }

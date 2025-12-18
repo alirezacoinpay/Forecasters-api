@@ -12,7 +12,6 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
 /*
@@ -41,7 +40,18 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Create a mock repository
+ */
+function mockRepository(string $interface): \Mockery\MockInterface
 {
-    // ..
+    return \Mockery::mock($interface);
+}
+
+/**
+ * Create an authenticated user
+ */
+function actingAsUser($user = null): \Tests\TestCase
+{
+    return test()->actingAsUser($user);
 }

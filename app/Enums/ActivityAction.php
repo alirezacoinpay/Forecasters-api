@@ -28,6 +28,7 @@ enum ActivityAction: string
     case COMMENT = 'comment';
     case COMMENT_REPLY = 'comment_reply';
     case COMMENT_LIKE = 'comment_like';
+    case PREDICTION_LIKE = 'prediction_like';
 
     // === SOCIAL ===
     case SHARE = 'share';
@@ -84,6 +85,7 @@ enum ActivityAction: string
             self::COMMENT,//
             self::COMMENT_REPLY,
             self::COMMENT_LIKE,
+            self::PREDICTION_LIKE,
             self::PREDICT,//
             self::PREDICTION_CHANGE,//
             self::SHARE,//
@@ -143,7 +145,8 @@ enum ActivityAction: string
             self::UNLIKE,
             self::COMMENT,
             self::COMMENT_REPLY,
-            self::COMMENT_LIKE => 'engagement',
+            self::COMMENT_LIKE,
+            self::PREDICTION_LIKE => 'engagement',
 
             self::SHARE,
             self::FOLLOW_USER,

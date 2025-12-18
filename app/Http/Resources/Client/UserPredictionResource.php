@@ -14,6 +14,10 @@ class UserPredictionResource extends JsonResource
             'user_id' => $this->user_id,
             'question_option_id' => $this->question_option_id,
             'percentage' => $this->percentage,
+            'likesCount' => $this->whenCounted('predictionLikes'),
+            'isLiked' => $this->whenLoaded('myPredictionLike', function () {
+                return $this->myPredictionLike !== null;
+            }),
             'question' => new QuestionResource($this->whenLoaded('question')),
             'questionOption' => new QuestionOptionResource($this->whenLoaded('question')),
         ];

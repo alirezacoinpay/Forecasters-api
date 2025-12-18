@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Config;
@@ -44,6 +45,16 @@ class UserPrediction extends BaseModel
     public function userPredictionPoint(): HasOne
     {
         return $this->hasOne(UserPrediction::class);
+    }
+
+    public function predictionLikes(): HasMany
+    {
+        return $this->hasMany(PredictionLike::class);
+    }
+
+    public function myPredictionLike(): HasOne
+    {
+        return $this->hasOne(PredictionLike::class)->where('user_id', auth()->id());
     }
     public function calculatePoints($question, $correctPredictionsCount): int
     {

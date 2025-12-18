@@ -5,7 +5,9 @@ use App\Http\Controllers\Client\{
     TagController,
     QuestionController,
     CommentController,
+    CommentLikeController,
     UserPredictionController,
+    PredictionLikeController,
     AuthController,
     UserController,
     ActivityController,
@@ -60,6 +62,10 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
         Route::delete('/comments/{id}', 'destroy');
     });
 
+    Route::controller(CommentLikeController::class)->group( function () {
+        Route::post('/comment-likes/{id}/toggle', 'toggle');
+    });
+
     Route::controller(UserController::class)->group( function () {
         Route::get('/me', 'me');
         Route::put('/edit-profile', 'editProfile');
@@ -71,6 +77,10 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
         Route::post('/predictions', 'store');
         Route::put('/predictions/{id}', 'update');
         Route::delete('/predictions/{id}', 'destroy');
+    });
+
+    Route::controller(PredictionLikeController::class)->group( function () {
+        Route::post('/prediction-likes/{id}/toggle', 'toggle');
     });
 
     Route::controller(QuestionForwardController::class)->group( function () {
