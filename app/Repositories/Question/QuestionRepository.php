@@ -26,29 +26,15 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
 
     public function findFeedPage($id)
     {
-        $userId = auth()->id();
-        
         return $this->model
             ->newQuery()
             ->withCount(['userPredictions', 'comments'])
-            ->with(['comments' => function ($query) use ($userId) {
+            ->with(['comments' => function ($query) {
                 $query->with(['user'])
-                    ->withCount(['children', 'commentLikes']);
-                if ($userId) {
-                    $query->with(['myCommentLike' => function ($q) use ($userId) {
-                        $q->where('user_id', $userId);
-                    }]);
-                }
-            }, 'tags', 'questionOptions' => function ($query) use ($userId) {
+                ->withCount(['children']);
+            }, 'tags', 'questionOptions' => function ($query) {
                 $query->withCount('userPredictions')
-                    ->with(['myPrediction', 'userPredictions' => function ($q) use ($userId) {
-                        $q->withCount('predictionLikes');
-                        if ($userId) {
-                            $q->with(['myPredictionLike' => function ($predLike) use ($userId) {
-                                $predLike->where('user_id', $userId);
-                            }]);
-                        }
-                    }]);
+                    ->with('myPrediction');
             }])
             ->find($id);
     }
@@ -61,24 +47,12 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
                 $query->where('user_id', $userId);
             }])
             ->withCount(['userPredictions', 'comments'])
-            ->with(['comments' => function ($query) use ($userId) {
+            ->with(['comments' => function ($query) {
                 $query->with(['user'])
-                    ->withCount(['children', 'commentLikes']);
-                if ($userId) {
-                    $query->with(['myCommentLike' => function ($q) use ($userId) {
-                        $q->where('user_id', $userId);
-                    }]);
-                }
-            }, 'tags', 'questionOptions' => function ($query) use ($userId) {
+                ->withCount(['children']);
+            }, 'tags', 'questionOptions' => function ($query) {
                 $query->withCount('userPredictions')
-                    ->with(['myPrediction', 'userPredictions' => function ($q) use ($userId) {
-                        $q->withCount('predictionLikes');
-                        if ($userId) {
-                            $q->with(['myPredictionLike' => function ($predLike) use ($userId) {
-                                $predLike->where('user_id', $userId);
-                            }]);
-                        }
-                    }]);
+                    ->with('myPrediction');
             }])
             ->find($id);
     }
@@ -127,23 +101,8 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
     {
         $query = $this->model
             ->newQuery()
-            ->with(['tags', 'user', 'comments' => function ($q) use ($userId) {
-                $q->withCount(['commentLikes']);
-                if ($userId) {
-                    $q->with(['myCommentLike' => function ($commentLike) use ($userId) {
-                        $commentLike->where('user_id', $userId);
-                    }]);
-                }
-            }, 'questionOptions' => function ($query) use ($userId) {
-                $query->withCount('userPredictions')
-                    ->with(['userPredictions' => function ($q) use ($userId) {
-                        $q->withCount('predictionLikes');
-                        if ($userId) {
-                            $q->with(['myPredictionLike' => function ($predLike) use ($userId) {
-                                $predLike->where('user_id', $userId);
-                            }]);
-                        }
-                    }]);
+            ->with(['tags', 'user', 'comments', 'questionOptions' => function ($query) {
+                $query->withCount('userPredictions');
             }])
             ->withCount(['comments', 'userPredictions', 'questionForwards']);
 
@@ -165,23 +124,8 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
     {
         $query = $this->model
             ->newQuery()
-            ->with(['tags', 'user', 'comments' => function ($q) use ($userId) {
-                $q->withCount(['commentLikes']);
-                if ($userId) {
-                    $q->with(['myCommentLike' => function ($commentLike) use ($userId) {
-                        $commentLike->where('user_id', $userId);
-                    }]);
-                }
-            }, 'questionOptions' => function ($query) use ($userId) {
-                $query->withCount('userPredictions')
-                    ->with(['userPredictions' => function ($q) use ($userId) {
-                        $q->withCount('predictionLikes');
-                        if ($userId) {
-                            $q->with(['myPredictionLike' => function ($predLike) use ($userId) {
-                                $predLike->where('user_id', $userId);
-                            }]);
-                        }
-                    }]);
+            ->with(['tags', 'user', 'comments', 'questionOptions' => function ($query) {
+                $query->withCount('userPredictions');
             }])
             ->withCount(['comments', 'userPredictions', 'questionForwards']);
 

@@ -108,10 +108,10 @@ class AuthController extends Controller
             minutes: 60 * 24 * 365,
             path: '/',
             domain: null,
-            secure: env('production'),
+            secure: true,
             httpOnly: true,
             raw: false,
-            sameSite: env('production') ? 'None' : 'Lax'
+            sameSite: env('production') ? 'Lax' : 'None'
         );
     }
 }

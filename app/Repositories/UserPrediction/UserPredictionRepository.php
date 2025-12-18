@@ -21,7 +21,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
     public function findById($id)
     {
         $query = $this->model->withTrashed();
-        
+
         if (auth()->check()) {
             $userId = auth()->id();
             $query->withCount('predictionLikes')
@@ -31,7 +31,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
         } else {
             $query->withCount('predictionLikes');
         }
-        
+
         return $query->find($id);
     }
 
@@ -60,15 +60,15 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     }
 
-    public function togglePredictionLike($predictionId, $userId)
+    public function togglePredictionLike($questionId, $userId)
     {
-        $prediction = $this->model->find($predictionId);
-        
+        $prediction = $this->model->find($questionId);
+
         if (!$prediction) {
             return null;
         }
 
-        $existingLike = PredictionLike::where('user_prediction_id', $predictionId)
+        $existingLike = PredictionLike::where('question_id', $questionId)
             ->where('user_id', $userId)
             ->first();
 
@@ -77,7 +77,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
             return false; // Unliked
         } else {
             PredictionLike::create([
-                'user_prediction_id' => $predictionId,
+                'question_id' => $questionId,
                 'user_id' => $userId,
             ]);
             return true; // Liked

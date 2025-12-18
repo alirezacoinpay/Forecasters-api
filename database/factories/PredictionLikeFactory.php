@@ -18,7 +18,7 @@ class PredictionLikeFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'user_prediction_id' => UserPrediction::factory(),
+            'question_id' => UserPrediction::factory(),
         ];
     }
 }
