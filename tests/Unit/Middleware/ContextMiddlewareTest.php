@@ -3,6 +3,9 @@
 use App\Http\Middleware\ContextMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('it adds UUID to context', function () {
     $middleware = new ContextMiddleware();

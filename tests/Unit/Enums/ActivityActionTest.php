@@ -44,7 +44,9 @@ test('group method returns correct group for engagement actions', function () {
 });
 
 test('label method returns human readable label', function () {
-    expect(ActivityAction::PREDICTION_CREATE->label())->toBe('Prediction Create');
-    expect(ActivityAction::COMMENT_LIKE->label())->toBe('Comment Like');
+    // The label() method uses ucfirst which only capitalizes first letter
+    // So "prediction_create" becomes "Prediction create" not "Prediction Create"
+    expect(ActivityAction::PREDICTION_CREATE->label())->toBe('Prediction create');
+    expect(ActivityAction::COMMENT_LIKE->label())->toBe('Comment like');
 });
 

@@ -2,6 +2,9 @@
 
 use App\Models\Topic;
 use App\Models\Prediction;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('topic has predictions relationship', function () {
     $topic = Topic::factory()->make(['id' => 1]);

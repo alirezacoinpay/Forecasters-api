@@ -18,11 +18,15 @@ test('it logs activity when user id is provided', function () {
     $action = ActivityAction::PREDICTION_CREATE;
     $subject = Mockery::mock(Prediction::class);
     $subject->shouldReceive('getKey')->andReturn(1);
+    $subject->shouldReceive('getMorphClass')->andReturn('App\Models\Prediction');
 
     ActivityLogger::log($userId, $action, $subject);
 
     Bus::assertDispatched(LogActivityJob::class, function ($job) use ($userId, $action) {
-        $payload = $job->payload;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
         return $payload['user_id'] === $userId
             && $payload['action'] === $action;
     });
@@ -42,12 +46,17 @@ test('it includes metadata in activity log', function () {
     $action = ActivityAction::PREDICTION_CREATE;
     $subject = Mockery::mock(Prediction::class);
     $subject->shouldReceive('getKey')->andReturn(1);
+    $subject->shouldReceive('getMorphClass')->andReturn('App\Models\Prediction');
     $metadata = ['key' => 'value'];
 
     ActivityLogger::log($userId, $action, $subject, $metadata);
 
     Bus::assertDispatched(LogActivityJob::class, function ($job) use ($metadata) {
-        return $job->payload['metadata'] === $metadata;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['metadata'] === $metadata;
     });
 });
 

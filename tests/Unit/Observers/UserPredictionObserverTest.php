@@ -5,6 +5,9 @@ use App\Models\Prediction;
 use App\Models\UserPrediction;
 use App\Observers\UserPredictionObserver;
 use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Bus::fake();
@@ -19,7 +22,11 @@ test('created logs predict activity', function () {
     $this->observer->created($userPrediction);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::PREDICT;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::PREDICT;
     });
 });
 
@@ -31,7 +38,11 @@ test('updated logs prediction change activity', function () {
     $this->observer->updated($userPrediction);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::PREDICTION_CHANGE;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::PREDICTION_CHANGE;
     });
 });
 

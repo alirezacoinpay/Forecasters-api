@@ -2,6 +2,9 @@
 
 use App\Models\User;
 use App\Models\UserPrediction;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('user has userPredictions relationship', function () {
     $user = User::factory()->make(['id' => 1]);

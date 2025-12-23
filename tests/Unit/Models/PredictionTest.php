@@ -4,6 +4,9 @@ use App\Models\Prediction;
 use App\Models\Comment;
 use App\Models\PredictionOption;
 use App\Models\Tag;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('prediction has user relationship', function () {
     $prediction = Prediction::factory()->make(['id' => 1]);

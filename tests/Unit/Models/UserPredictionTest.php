@@ -4,6 +4,9 @@ use App\Models\UserPrediction;
 use App\Models\PredictionLike;
 use App\Models\Prediction;
 use Illuminate\Support\Facades\Config;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('userPrediction has predictionLikes relationship', function () {
     $prediction = UserPrediction::factory()->make(['id' => 1]);

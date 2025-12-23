@@ -5,6 +5,9 @@ use App\Models\Comment;
 use App\Models\Prediction;
 use App\Observers\CommentObserver;
 use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Bus::fake();
@@ -17,7 +20,11 @@ test('created logs comment reply when parent_id exists', function () {
     $this->observer->created($comment);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::COMMENT_REPLY;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::COMMENT_REPLY;
     });
 });
 
@@ -29,7 +36,11 @@ test('created logs comment activity', function () {
     $this->observer->created($comment);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::COMMENT;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::COMMENT;
     });
 });
 

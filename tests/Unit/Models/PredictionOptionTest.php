@@ -2,6 +2,9 @@
 
 use App\Models\PredictionOption;
 use App\Models\UserPrediction;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('predictionOption has prediction relationship', function () {
     $option = PredictionOption::factory()->make(['id' => 1]);

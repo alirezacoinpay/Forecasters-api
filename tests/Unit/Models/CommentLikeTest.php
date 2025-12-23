@@ -3,6 +3,9 @@
 use App\Models\CommentLike;
 use App\Models\User;
 use App\Models\Comment;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('commentLike has user relationship', function () {
     $like = CommentLike::factory()->make(['id' => 1]);

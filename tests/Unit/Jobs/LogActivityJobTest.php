@@ -4,6 +4,9 @@ use App\Jobs\LogActivityJob;
 use App\Models\ActivityLog;
 use Illuminate\Database\Eloquent\Builder;
 use Mockery;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('handle creates activity log', function () {
     $payload = [
@@ -17,7 +20,9 @@ test('handle creates activity log', function () {
     $job = new LogActivityJob($payload);
     $query = Mockery::mock(Builder::class);
     
-    ActivityLog::shouldReceive('query')->once()->andReturn($query);
+    // Use alias to mock static method
+    $activityLogMock = Mockery::mock('alias:App\Models\ActivityLog');
+    $activityLogMock->shouldReceive('query')->once()->andReturn($query);
     $query->shouldReceive('create')->with($payload)->once()->andReturn(true);
     
     $job->handle();

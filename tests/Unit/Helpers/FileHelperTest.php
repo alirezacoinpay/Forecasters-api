@@ -3,6 +3,9 @@
 use App\Helpers\FileHelper;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Storage::fake('public');

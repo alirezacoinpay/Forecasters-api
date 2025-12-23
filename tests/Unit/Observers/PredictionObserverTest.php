@@ -5,6 +5,9 @@ use App\Models\Prediction;
 use App\Observers\PredictionObserver;
 use App\Services\ActivityLogger\ActivityLogger;
 use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Bus::fake();
@@ -17,7 +20,11 @@ test('created logs activity when user_id exists', function () {
     $this->observer->created($prediction);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::PREDICTION_CREATE;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::PREDICTION_CREATE;
     });
 });
 
@@ -35,7 +42,11 @@ test('updated logs activity when user_id exists', function () {
     $this->observer->updated($prediction);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::PREDICTION_EDIT;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::PREDICTION_EDIT;
     });
 });
 
@@ -45,7 +56,11 @@ test('deleted logs activity when user_id exists', function () {
     $this->observer->deleted($prediction);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::PREDICTION_DELETE;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::PREDICTION_DELETE;
     });
 });
 

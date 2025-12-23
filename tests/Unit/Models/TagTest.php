@@ -2,6 +2,9 @@
 
 use App\Models\Tag;
 use App\Models\Prediction;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('tag has predictions relationship', function () {
     $tag = Tag::factory()->make(['id' => 1]);

@@ -2,6 +2,9 @@
 
 use App\Models\Comment;
 use App\Models\CommentLike;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 test('comment has commentLikes relationship', function () {
     $comment = Comment::factory()->make(['id' => 1]);

@@ -5,6 +5,9 @@ use App\Models\Prediction;
 use App\Models\PredictionForward;
 use App\Observers\PredictionForwardObserver;
 use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Bus::fake();
@@ -19,7 +22,11 @@ test('created logs share activity', function () {
     $this->observer->created($forward);
     
     Bus::assertDispatched(\App\Jobs\LogActivityJob::class, function ($job) {
-        return $job->payload['action'] === ActivityAction::SHARE;
+        $reflection = new \ReflectionClass($job);
+        $property = $reflection->getProperty('payload');
+        $property->setAccessible(true);
+        $payload = $property->getValue($job);
+        return $payload['action'] === ActivityAction::SHARE;
     });
 });
 

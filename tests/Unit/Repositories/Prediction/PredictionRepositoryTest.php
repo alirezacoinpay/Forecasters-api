@@ -4,7 +4,11 @@ use App\Models\Prediction;
 use App\Models\PredictionOption;
 use App\Repositories\Prediction\PredictionRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Mockery;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     $this->model = Mockery::mock(Prediction::class);
@@ -21,7 +25,7 @@ test('findFeedPage returns prediction with relationships', function () {
     $query->shouldReceive('with')->atLeast()->once()->andReturn($query);
     $query->shouldReceive('find')->with(1)->once()->andReturn($prediction);
     
-    auth()->shouldReceive('id')->andReturn(1);
+    Auth::shouldReceive('id')->andReturn(1);
     
     $result = $this->repository->findFeedPage(1);
     
