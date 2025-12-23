@@ -4,8 +4,8 @@ namespace Tests\Helpers;
 
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Comment\CommentRepositoryInterface;
-use App\Repositories\Question\QuestionRepositoryInterface;
-use App\Repositories\QuestionForward\QuestionForwardRepositoryInterface;
+use App\Repositories\Prediction\PredictionRepositoryInterface;
+use App\Repositories\PredictionForward\PredictionForwardRepositoryInterface;
 use App\Repositories\Tag\TagRepositoryInterface;
 use App\Repositories\Topic\TopicRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -31,11 +31,11 @@ class RepositoryMocks
     }
 
     /**
-     * Create a mock QuestionRepository
+     * Create a mock PredictionRepository
      */
-    public static function questionRepository(): Mockery\MockInterface
+    public static function predictionRepository(): Mockery\MockInterface
     {
-        return Mockery::mock(QuestionRepositoryInterface::class);
+        return Mockery::mock(PredictionRepositoryInterface::class);
     }
 
     /**
@@ -63,11 +63,11 @@ class RepositoryMocks
     }
 
     /**
-     * Create a mock QuestionForwardRepository
+     * Create a mock PredictionForwardRepository
      */
-    public static function questionForwardRepository(): Mockery\MockInterface
+    public static function predictionForwardRepository(): Mockery\MockInterface
     {
-        return Mockery::mock(QuestionForwardRepositoryInterface::class);
+        return Mockery::mock(PredictionForwardRepositoryInterface::class);
     }
 
     /**

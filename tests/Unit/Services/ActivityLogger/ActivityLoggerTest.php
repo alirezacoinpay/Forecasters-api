@@ -2,7 +2,7 @@
 
 use App\Enums\ActivityAction;
 use App\Jobs\LogActivityJob;
-use App\Models\Question;
+use App\Models\Prediction;
 use App\Services\ActivityLogger\ActivityLogger;
 use Illuminate\Support\Facades\Bus;
 
@@ -12,8 +12,8 @@ beforeEach(function () {
 
 test('it logs activity when user id is provided', function () {
     $userId = 1;
-    $action = ActivityAction::QUESTION_CREATE;
-    $subject = Mockery::mock(Question::class);
+    $action = ActivityAction::PREDICTION_CREATE;
+    $subject = Mockery::mock(Prediction::class);
     $subject->shouldReceive('getKey')->andReturn(1);
 
     ActivityLogger::log($userId, $action, $subject);
@@ -26,8 +26,8 @@ test('it logs activity when user id is provided', function () {
 });
 
 test('it does not log activity when user id is null', function () {
-    $action = ActivityAction::QUESTION_CREATE;
-    $subject = Mockery::mock(Question::class);
+    $action = ActivityAction::PREDICTION_CREATE;
+    $subject = Mockery::mock(Prediction::class);
 
     ActivityLogger::log(null, $action, $subject);
 
@@ -36,8 +36,8 @@ test('it does not log activity when user id is null', function () {
 
 test('it includes metadata in activity log', function () {
     $userId = 1;
-    $action = ActivityAction::QUESTION_CREATE;
-    $subject = Mockery::mock(Question::class);
+    $action = ActivityAction::PREDICTION_CREATE;
+    $subject = Mockery::mock(Prediction::class);
     $subject->shouldReceive('getKey')->andReturn(1);
     $metadata = ['key' => 'value'];
 

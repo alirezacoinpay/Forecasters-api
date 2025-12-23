@@ -33,7 +33,7 @@ test('it creates comment with valid data', function () {
     
     $response = $this->actingAs($user, 'sanctum')
         ->postJson('/api/v1/comments', [
-            'question_id' => 1,
+            'prediction_id' => 1,
             'text' => 'Test comment',
         ]);
     

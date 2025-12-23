@@ -2,11 +2,11 @@
 
 use App\Http\Requests\Client\Comments\UpdateCommentRequest;
 
-test('it validates question_id exists when provided', function () {
+test('it validates prediction_id exists when provided', function () {
     $request = new UpdateCommentRequest();
     
     $validator = validator($request->rules(), [
-        'question_id' => 99999,
+        'prediction_id' => 99999,
     ]);
     
     expect($validator->fails())->toBeTrue();

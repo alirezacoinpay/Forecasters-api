@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Tag;
-use App\Models\Question;
+use App\Models\Prediction;
 
-test('tag has question relationship', function () {
+test('tag has predictions relationship', function () {
     $tag = Tag::factory()->make(['id' => 1]);
     
-    $relationship = $tag->question();
+    $relationship = $tag->predictions();
     
     expect($relationship)->toBeInstanceOf(\Illuminate\Database\Eloquent\Relations\HasManyThrough::class);
 });

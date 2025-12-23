@@ -35,7 +35,7 @@
 ### Test Organization
 - ✅ Tests organized by component type (Unit/Feature)
 - ✅ Unit tests grouped by domain (Repositories, Services, Models, etc.)
-- ✅ Feature tests grouped by feature area (Auth, Questions, Comments, etc.)
+- ✅ Feature tests grouped by feature area (Auth, Predictions, Comments, etc.)
 
 ## ✅ Test Coverage
 
@@ -52,7 +52,7 @@
 
 ### Feature Tests
 - ✅ Authentication endpoints
-- ✅ Question endpoints
+- ✅ Prediction endpoints
 - ✅ Comment endpoints (including likes)
 - ✅ Prediction endpoints (including likes)
 - ✅ Category/Topic/Tag endpoints

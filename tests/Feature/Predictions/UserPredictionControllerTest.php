@@ -2,18 +2,18 @@
 
 use App\Models\User;
 use App\Models\UserPrediction;
-use App\Models\QuestionOption;
+use App\Models\PredictionOption;
 use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
-use App\Repositories\Question\QuestionRepositoryInterface;
+use App\Repositories\Prediction\PredictionRepositoryInterface;
 use App\Repositories\Comment\CommentRepositoryInterface;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(UserPredictionRepositoryInterface::class);
-    $this->questionRepository = Mockery::mock(QuestionRepositoryInterface::class);
+    $this->predictionRepository = Mockery::mock(PredictionRepositoryInterface::class);
     $this->commentRepository = Mockery::mock(CommentRepositoryInterface::class);
     
     $this->app->instance(UserPredictionRepositoryInterface::class, $this->repository);
-    $this->app->instance(QuestionRepositoryInterface::class, $this->questionRepository);
+    $this->app->instance(PredictionRepositoryInterface::class, $this->predictionRepository);
     $this->app->instance(CommentRepositoryInterface::class, $this->commentRepository);
 });
 
@@ -33,10 +33,10 @@ test('it returns prediction resource when found', function () {
 
 test('it creates prediction with valid data', function () {
     $user = User::factory()->make(['id' => 1]);
-    $option = QuestionOption::factory()->make(['id' => 1, 'question_id' => 1]);
+    $option = PredictionOption::factory()->make(['id' => 1, 'prediction_id' => 1]);
     $prediction = UserPrediction::factory()->make(['id' => 1]);
     
-    $this->questionRepository->shouldReceive('findQuestionOptionByIdLight')
+    $this->predictionRepository->shouldReceive('findPredictionOptionByIdLight')
         ->with(1)
         ->once()
         ->andReturn($option);
@@ -47,24 +47,24 @@ test('it creates prediction with valid data', function () {
     
     $response = $this->actingAs($user, 'sanctum')
         ->postJson('/api/v1/predictions', [
-            'question_option_id' => 1,
+            'prediction_option_id' => 1,
         ]);
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 });
 
-test('it returns 404 when question option not found', function () {
+test('it returns 404 when prediction option not found', function () {
     $user = User::factory()->make(['id' => 1]);
     
-    $this->questionRepository->shouldReceive('findQuestionOptionByIdLight')
+    $this->predictionRepository->shouldReceive('findPredictionOptionByIdLight')
         ->with(999)
         ->once()
         ->andReturn(null);
     
     $response = $this->actingAs($user, 'sanctum')
         ->postJson('/api/v1/predictions', [
-            'question_option_id' => 999,
+            'prediction_option_id' => 999,
         ]);
     
     $response->assertStatus(404);

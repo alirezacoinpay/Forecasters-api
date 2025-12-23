@@ -8,13 +8,13 @@ test('it transforms comment to array', function () {
         'id' => 1,
         'text' => 'Test comment',
         'user_id' => 1,
-        'question_id' => 1,
+        'prediction_id' => 1,
     ]);
     
     $resource = new CommentResource($comment);
     $array = $resource->toArray(request());
     
-    expect($array)->toHaveKeys(['user_id', 'question_id', 'text', 'time_past']);
+    expect($array)->toHaveKeys(['user_id', 'prediction_id', 'text', 'time_past']);
     expect($array['text'])->toBe('Test comment');
 });
 

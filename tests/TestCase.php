@@ -13,11 +13,11 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Fake queues and buses for all tests
         Bus::fake();
         Queue::fake();
-        
+
         // Clear cache before each test
         Cache::flush();
     }
@@ -39,10 +39,10 @@ abstract class TestCase extends BaseTestCase
     /**
      * Create an authenticated user for testing
      */
-    protected function actingAsUser($user = null)
+    public function actingAsUser($user = null)
     {
         $user = $user ?? \App\Models\User::factory()->make();
-        
+
         return $this->actingAs($user, 'sanctum');
     }
 }

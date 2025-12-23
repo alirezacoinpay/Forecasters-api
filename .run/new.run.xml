@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="new" type="PestRunConfigurationType" editBeforeRun="true" activateToolWindowBeforeRun="false" singleton="false">
+    <CommandLine>
+      <PhpTestInterpreterSettings>
+        <option name="interpreterName" value="HerdPHP" />
+      </PhpTestInterpreterSettings>
+    </CommandLine>
+    <PestRunner directory="$PROJECT_DIR$/tests" method="" />
+    <method v="2" />
+  </configuration>
+</component>

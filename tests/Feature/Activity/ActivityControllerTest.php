@@ -13,9 +13,9 @@ test('it logs activity', function () {
     
     $response = $this->actingAs($user, 'sanctum')
         ->postJson('/api/v1/activity', [
-            'action' => ActivityAction::QUESTION_VIEW->value,
+            'action' => ActivityAction::PREDICTION_VIEW->value,
             'subject_id' => 1,
-            'subject_type' => 'App\Models\Question',
+            'subject_type' => 'App\Models\Prediction',
             'metadata' => [],
         ]);
     
@@ -27,7 +27,7 @@ test('it logs activity', function () {
 
 test('it requires authentication', function () {
     $response = $this->postJson('/api/v1/activity', [
-        'action' => ActivityAction::QUESTION_VIEW->value,
+        'action' => ActivityAction::PREDICTION_VIEW->value,
     ]);
     
     $response->assertStatus(401);

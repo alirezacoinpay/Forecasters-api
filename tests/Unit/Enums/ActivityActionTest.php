@@ -6,7 +6,7 @@ test('it can convert to array', function () {
     $array = ActivityAction::toArray();
     
     expect($array)->toBeArray();
-    expect($array)->toContain(ActivityAction::QUESTION_CREATE->value);
+    expect($array)->toContain(ActivityAction::PREDICTION_CREATE->value);
     expect($array)->toContain(ActivityAction::COMMENT_LIKE->value);
 });
 
@@ -14,13 +14,13 @@ test('it can convert to form array', function () {
     $formArray = ActivityAction::toFormArray();
     
     expect($formArray)->toBeArray();
-    expect($formArray[ActivityAction::QUESTION_CREATE->value])->toBe('QUESTION_CREATE');
+    expect($formArray[ActivityAction::PREDICTION_CREATE->value])->toBe('PREDICTION_CREATE');
 });
 
 test('it can find enum by value', function () {
-    $result = ActivityAction::find(ActivityAction::QUESTION_CREATE->value);
+    $result = ActivityAction::find(ActivityAction::PREDICTION_CREATE->value);
     
-    expect($result)->toBe('question_create');
+    expect($result)->toBe('prediction_create');
 });
 
 test('it returns null when value not found', function () {
@@ -44,7 +44,7 @@ test('group method returns correct group for engagement actions', function () {
 });
 
 test('label method returns human readable label', function () {
-    expect(ActivityAction::QUESTION_CREATE->label())->toBe('Question Create');
+    expect(ActivityAction::PREDICTION_CREATE->label())->toBe('Prediction Create');
     expect(ActivityAction::COMMENT_LIKE->label())->toBe('Comment Like');
 });
 

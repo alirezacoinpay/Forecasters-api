@@ -11,7 +11,7 @@ class TestHelpers
     /**
      * Assert that a job was dispatched
      */
-    public static function assertJobDispatched(string $jobClass, callable $callback = null): void
+    public static function assertJobDispatched(string $jobClass, ?callable $callback = null): void
     {
         Bus::assertDispatched($jobClass, $callback);
     }

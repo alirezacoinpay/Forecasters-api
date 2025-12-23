@@ -2,7 +2,7 @@
 
 use App\Models\UserPrediction;
 use App\Models\PredictionLike;
-use App\Models\Question;
+use App\Models\Prediction;
 use Illuminate\Support\Facades\Config;
 
 test('userPrediction has predictionLikes relationship', function () {
@@ -24,13 +24,13 @@ test('userPrediction has myPredictionLike relationship', function () {
 test('calculatePoints returns penalty for wrong answer', function () {
     Config::set('forecast_points.penalty_score', -2);
     
-    $prediction = UserPrediction::factory()->make(['question_option_id' => 1]);
-    $question = Question::factory()->make(['id' => 1]);
+    $userPrediction = UserPrediction::factory()->make(['prediction_option_id' => 1]);
+    $prediction = Prediction::factory()->make(['id' => 1]);
     $correctOption = Mockery::mock();
     $correctOption->id = 2;
-    $question->setRelation('questionTrueOption', $correctOption);
+    $prediction->setRelation('predictionTrueOption', $correctOption);
     
-    $points = $prediction->calculatePoints($question, 0);
+    $points = $userPrediction->calculatePoints($prediction, 0);
     
     expect($points)->toBe(-2);
 });
@@ -45,21 +45,21 @@ test('calculatePoints calculates positive points for correct answer', function (
     Config::set('forecast_points.factor_min_score', 1.0);
     Config::set('forecast_points.popularity_k', 100);
     
-    $prediction = UserPrediction::factory()->make([
-        'question_option_id' => 1,
+    $userPrediction = UserPrediction::factory()->make([
+        'prediction_option_id' => 1,
         'updated_at' => now(),
     ]);
-    $question = Question::factory()->make([
+    $prediction = Prediction::factory()->make([
         'id' => 1,
         'starts_at' => now()->subDays(1),
         'resolve_at' => now()->addDays(1),
     ]);
     $correctOption = Mockery::mock();
     $correctOption->id = 1;
-    $question->setRelation('questionTrueOption', $correctOption);
-    $question->setRelation('userPredictions', collect([$prediction]));
+    $prediction->setRelation('predictionTrueOption', $correctOption);
+    $prediction->setRelation('userPredictions', collect([$userPrediction]));
     
-    $points = $prediction->calculatePoints($question, 1);
+    $points = $userPrediction->calculatePoints($prediction, 1);
     
     expect($points)->toBeGreaterThan(0);
 });

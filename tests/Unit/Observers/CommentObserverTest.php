@@ -2,7 +2,7 @@
 
 use App\Enums\ActivityAction;
 use App\Models\Comment;
-use App\Models\Question;
+use App\Models\Prediction;
 use App\Observers\CommentObserver;
 use Illuminate\Support\Facades\Bus;
 
@@ -22,9 +22,9 @@ test('created logs comment reply when parent_id exists', function () {
 });
 
 test('created logs comment activity', function () {
-    $question = Question::factory()->make(['id' => 1]);
+    $prediction = Prediction::factory()->make(['id' => 1]);
     $comment = Comment::factory()->make(['id' => 1, 'user_id' => 1, 'parent_id' => null]);
-    $comment->setRelation('question', $question);
+    $comment->setRelation('prediction', $prediction);
     
     $this->observer->created($comment);
     

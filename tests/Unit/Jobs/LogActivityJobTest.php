@@ -8,9 +8,9 @@ use Mockery;
 test('handle creates activity log', function () {
     $payload = [
         'user_id' => 1,
-        'action' => \App\Enums\ActivityAction::QUESTION_CREATE,
+        'action' => \App\Enums\ActivityAction::PREDICTION_CREATE,
         'subject_id' => 1,
-        'subject_type' => 'App\Models\Question',
+        'subject_type' => 'App\Models\Prediction',
         'metadata' => [],
     ];
     

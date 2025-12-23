@@ -1,22 +1,22 @@
 <?php
 
-use App\Models\Question;
+use App\Models\Prediction;
 use App\Models\User;
-use App\Repositories\Question\QuestionRepositoryInterface;
+use App\Repositories\Prediction\PredictionRepositoryInterface;
 
 beforeEach(function () {
-    $this->repository = Mockery::mock(QuestionRepositoryInterface::class);
-    $this->app->instance(QuestionRepositoryInterface::class, $this->repository);
+    $this->repository = Mockery::mock(PredictionRepositoryInterface::class);
+    $this->app->instance(PredictionRepositoryInterface::class, $this->repository);
 });
 
 test('it returns search results', function () {
     $user = User::factory()->make(['id' => 1]);
-    $questions = collect([Question::factory()->make()]);
+    $predictions = collect([Prediction::factory()->make()]);
     
-    $this->repository->shouldReceive('userSearchQuestions')
+    $this->repository->shouldReceive('userSearchPredictions')
         ->with(1, ['search' => 'test'])
         ->once()
-        ->andReturn($questions);
+        ->andReturn($predictions);
     
     $response = $this->actingAs($user, 'sanctum')
         ->getJson('/api/v1/search?search=test');
