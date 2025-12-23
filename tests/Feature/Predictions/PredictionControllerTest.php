@@ -39,16 +39,9 @@ test('it returns 404 when prediction not found', function () {
     $response->assertStatus(404);
 });
 
-test('it works without authentication', function () {
-    $prediction = Prediction::factory()->make(['id' => 1]);
-    
-    $this->repository->shouldReceive('userFeedPrediction')
-        ->with(1, null)
-        ->once()
-        ->andReturn($prediction);
-    
+test('it requires authentication', function () {
     $response = $this->getJson('/api/v1/predictions/1');
     
-    $response->assertStatus(200);
+    $response->assertStatus(401);
 });
 

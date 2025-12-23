@@ -20,7 +20,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     public function findById($id)
     {
-        $query = $this->model->withTrashed();
+        $query = $this->model;
 
         if (auth()->check()) {
             $userId = auth()->id();
@@ -40,15 +40,6 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
     {
         $query = $this->model->newQuery();
 
-
-
-        if (isset($params['trashed'])) {
-            if ($params['trashed']) {
-                $query->onlyTrashed();
-            }
-        }else{
-            $query->withTrashed();
-        }
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
         if (!empty($params['paginate'])) {

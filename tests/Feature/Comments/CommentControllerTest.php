@@ -10,6 +10,7 @@ beforeEach(function () {
 });
 
 test('it returns comment resource when found', function () {
+    $user = User::factory()->make(['id' => 1]);
     $comment = Comment::factory()->make(['id' => 1]);
     
     $this->repository->shouldReceive('findById')
@@ -17,7 +18,8 @@ test('it returns comment resource when found', function () {
         ->once()
         ->andReturn($comment);
     
-    $response = $this->getJson('/api/v1/comments/1');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/comments/1');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);

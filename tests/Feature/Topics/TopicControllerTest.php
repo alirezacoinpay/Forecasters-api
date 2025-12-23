@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Topic;
+use App\Models\User;
 use App\Repositories\Topic\TopicRepositoryInterface;
 
 beforeEach(function () {
@@ -9,6 +10,7 @@ beforeEach(function () {
 });
 
 test('it returns topic resource when found', function () {
+    $user = User::factory()->make(['id' => 1]);
     $topic = Topic::factory()->make(['id' => 1]);
     
     $this->repository->shouldReceive('findById')
@@ -16,13 +18,15 @@ test('it returns topic resource when found', function () {
         ->once()
         ->andReturn($topic);
     
-    $response = $this->getJson('/api/v1/topics/1');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/topics/1');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 });
 
 test('it returns list of topics', function () {
+    $user = User::factory()->make(['id' => 1]);
     $topics = collect([Topic::factory()->make()]);
     
     $this->repository->shouldReceive('all')
@@ -30,7 +34,8 @@ test('it returns list of topics', function () {
         ->once()
         ->andReturn($topics);
     
-    $response = $this->getJson('/api/v1/topics');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/topics');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);

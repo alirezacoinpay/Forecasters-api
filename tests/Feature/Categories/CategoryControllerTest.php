@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\User;
 use App\Repositories\Category\CategoryRepositoryInterface;
 
 beforeEach(function () {
@@ -9,6 +10,7 @@ beforeEach(function () {
 });
 
 test('it returns category resource when found', function () {
+    $user = User::factory()->make(['id' => 1]);
     $category = Category::factory()->make(['id' => 1]);
     
     $this->repository->shouldReceive('findById')
@@ -16,13 +18,15 @@ test('it returns category resource when found', function () {
         ->once()
         ->andReturn($category);
     
-    $response = $this->getJson('/api/v1/categories/1');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/categories/1');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 });
 
 test('it returns list of categories', function () {
+    $user = User::factory()->make(['id' => 1]);
     $categories = collect([Category::factory()->make()]);
     
     $this->repository->shouldReceive('allFeedPage')
@@ -30,7 +34,8 @@ test('it returns list of categories', function () {
         ->once()
         ->andReturn($categories);
     
-    $response = $this->getJson('/api/v1/categories');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/categories');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);

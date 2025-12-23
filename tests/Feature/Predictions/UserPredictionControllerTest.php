@@ -18,6 +18,7 @@ beforeEach(function () {
 });
 
 test('it returns prediction resource when found', function () {
+    $user = User::factory()->make(['id' => 1]);
     $prediction = UserPrediction::factory()->make(['id' => 1]);
     
     $this->repository->shouldReceive('findById')
@@ -25,7 +26,8 @@ test('it returns prediction resource when found', function () {
         ->once()
         ->andReturn($prediction);
     
-    $response = $this->getJson('/api/v1/predictions/1');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/predictions/1');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Tag;
+use App\Models\User;
 use App\Repositories\Tag\TagRepositoryInterface;
 
 beforeEach(function () {
@@ -9,6 +10,7 @@ beforeEach(function () {
 });
 
 test('it returns tag resource when found', function () {
+    $user = User::factory()->make(['id' => 1]);
     $tag = Tag::factory()->make(['id' => 1]);
     
     $this->repository->shouldReceive('findById')
@@ -16,13 +18,15 @@ test('it returns tag resource when found', function () {
         ->once()
         ->andReturn($tag);
     
-    $response = $this->getJson('/api/v1/tags/1');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/tags/1');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
 });
 
 test('it returns list of tags', function () {
+    $user = User::factory()->make(['id' => 1]);
     $tags = collect([Tag::factory()->make()]);
     
     $this->repository->shouldReceive('all')
@@ -30,7 +34,8 @@ test('it returns list of tags', function () {
         ->once()
         ->andReturn($tags);
     
-    $response = $this->getJson('/api/v1/tags');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/v1/tags');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
