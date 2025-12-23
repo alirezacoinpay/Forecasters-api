@@ -59,6 +59,11 @@ test('it creates prediction with valid data', function () {
 test('it returns 404 when prediction option not found', function () {
     $user = User::factory()->make(['id' => 1]);
     
+    // Create a prediction option in the database so validation passes
+    // The validation Rule::exists will check the database
+    $option = \App\Models\PredictionOption::factory()->create(['id' => 999]);
+    
+    // Mock the repository to return null (simulating not found after validation passes)
     $this->predictionRepository->shouldReceive('findPredictionOptionByIdLight')
         ->with(999)
         ->once()
@@ -68,6 +73,9 @@ test('it returns 404 when prediction option not found', function () {
         ->postJson('/api/v1/predictions', [
             'prediction_option_id' => 999,
         ]);
+    
+    // Clean up
+    $option->delete();
     
     $response->assertStatus(404);
 });

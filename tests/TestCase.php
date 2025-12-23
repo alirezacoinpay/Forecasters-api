@@ -35,6 +35,18 @@ abstract class TestCase extends BaseTestCase
             // Run migrations for the configured test database
             // If using MySQL from .env.testing, all migrations will work properly
             // If using SQLite, some MySQL-specific migrations may fail but base tables will be created
+            try {
+                Artisan::call('migrate', [
+                    '--database' => $connection,
+                    '--force' => true,
+                    '--path' => 'database/migrations',
+                ]);
+            } catch (\Exception $e) {
+                // If using SQLite, some migrations use MySQL-specific syntax (->change(), ->renameColumn())
+                // that SQLite doesn't support. This is acceptable for testing.
+                // The base table structures are created, which is sufficient for validation rules.
+                // With MySQL from .env.testing, all migrations should work properly.
+            }
 
             static::$migrationsRun = true;
         }

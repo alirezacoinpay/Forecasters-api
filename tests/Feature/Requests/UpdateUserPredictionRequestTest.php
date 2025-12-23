@@ -5,24 +5,20 @@ use App\Models\PredictionOption;
 
 test('it validates required prediction_option_id', function () {
     $request = new UpdateUserPredictionRequest();
-
-    // Simulate an empty request input
-//    $request->replace([]); // or $request->merge([]) if needed
-    // This triggers the full validation pipeline (including prepareForValidation, etc.)
-    $request->validateResolved();
-
-    // Now check if validation failed
-    expect($request->fails())->toBeTrue();
-    expect($request->errors()->has('prediction_option_id'))->toBeTrue();
+    
+    $validator = validator([], $request->rules());
+    
+    expect($validator->fails())->toBeTrue();
+    expect($validator->errors()->has('prediction_option_id'))->toBeTrue();
 });
 
 test('it validates prediction_option_id exists', function () {
     $request = new UpdateUserPredictionRequest();
-
-    $validator = validator($request->rules(), [
+    
+    $validator = validator([
         'prediction_option_id' => 99999,
-    ]);
-
+    ], $request->rules());
+    
     expect($validator->fails())->toBeTrue();
 });
 

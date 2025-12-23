@@ -6,7 +6,7 @@ use App\Models\PredictionOption;
 test('it validates required prediction_option_id', function () {
     $request = new AddUserPredictionRequest();
     
-    $validator = validator($request->rules(), []);
+    $validator = validator([], $request->rules());
     
     expect($validator->fails())->toBeTrue();
     expect($validator->errors()->has('prediction_option_id'))->toBeTrue();
@@ -15,9 +15,9 @@ test('it validates required prediction_option_id', function () {
 test('it validates prediction_option_id exists', function () {
     $request = new AddUserPredictionRequest();
     
-    $validator = validator($request->rules(), [
+    $validator = validator([
         'prediction_option_id' => 99999,
-    ]);
+    ], $request->rules());
     
     expect($validator->fails())->toBeTrue();
 });
