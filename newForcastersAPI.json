@@ -1,0 +1,1068 @@
+{
+	"info": {
+		"_postman_id": "7bfbe4ef-f1ee-4df3-8187-a8e177d86858",
+		"name": "Forcasters",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39950874",
+		"_collection_link": "https://teamforwork.postman.co/workspace/Personal~80e601cc-2c47-42b4-82e8-83bf2924a71f/collection/39950874-7bfbe4ef-f1ee-4df3-8187-a8e177d86858?action=share&source=collection_link&creator=39950874"
+	},
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "login"]
+            }
+          }
+        },
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mobile\": \"09123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/send-otp",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "send-otp"]
+            }
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"mobile\": \"09123456789\",\n    \"otp\": \"12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/verify-otp",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "verify-otp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feed",
+      "item": [
+        {
+          "name": "Get Prediction Feed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/prediction-feed?topic_id=1&sort=desc&paginate=10&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "prediction-feed"],
+              "query": [
+                {
+                  "key": "topic_id",
+                  "value": "1",
+                  "description": "Optional - Filter by topic ID"
+                },
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Predictions",
+      "item": [
+        {
+          "name": "Get Prediction by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/predictions/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "predictions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Topics",
+      "item": [
+        {
+          "name": "Get All Topics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/topics?sort=desc&paginate=10&page=1&trashed=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "topics"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Topic by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/topics/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "topics", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories?sort=desc&paginate=10&page=1&trashed=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "item": [
+        {
+          "name": "Get All Tags",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tags?sort=desc&paginate=10&page=1&trashed=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tags"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Tag by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tags/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tags", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Get Search History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/search-history?sort=desc&paginate=10&page=1&trashed=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "search-history"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/search?search=keyword&tag_id=1&sort=desc&paginate=10&page=1&trashed=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "search"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "keyword",
+                  "description": "Optional - Search keyword (max 255 chars)"
+                },
+                {
+                  "key": "tag_id",
+                  "value": "1",
+                  "description": "Optional - Filter by tag ID"
+                },
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Get Comment by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/comments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "comments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "prediction_id",
+                  "value": "1",
+                  "type": "text",
+                  "description": "Required - Prediction ID"
+                },
+                {
+                  "key": "parent_id",
+                  "value": "",
+                  "type": "text",
+                  "description": "Optional - Parent comment ID (for replies)"
+                },
+                {
+                  "key": "text",
+                  "value": "This is a comment",
+                  "type": "text",
+                  "description": "Optional - Comment text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "Optional - Image file (max 10MB, mimes: image)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/comments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "prediction_id",
+                  "value": "1",
+                  "type": "text",
+                  "description": "Optional - Prediction ID"
+                },
+                {
+                  "key": "parent_id",
+                  "value": "",
+                  "type": "text",
+                  "description": "Optional - Parent comment ID"
+                },
+                {
+                  "key": "text",
+                  "value": "Updated comment text",
+                  "type": "text",
+                  "description": "Optional - Comment text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "Optional - File (max 10MB, mimes: pdf,image,doc)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/comments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "comments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/comments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "comments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comment Likes",
+      "item": [
+        {
+          "name": "Toggle Comment Like",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/comment-likes/:id/toggle",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "comment-likes", ":id", "toggle"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "me"]
+            }
+          }
+        },
+        {
+          "name": "Edit Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"newusername\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/edit-profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "edit-profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Predictions",
+      "item": [
+        {
+          "name": "Get User Prediction by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/user-predictions/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user-predictions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All User Predictions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/user-predictions?prediction_id=1&sort=desc&paginate=10&page=1&trashed=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user-predictions"],
+              "query": [
+                {
+                  "key": "prediction_id",
+                  "value": "1",
+                  "description": "Optional - Filter by prediction ID"
+                },
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Optional - Sort order: asc or desc"
+                },
+                {
+                  "key": "paginate",
+                  "value": "10",
+                  "description": "Optional - Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Optional - Page number"
+                },
+                {
+                  "key": "trashed",
+                  "value": "false",
+                  "description": "Optional - Include trashed items (boolean)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User Prediction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "prediction_option_id",
+                  "value": "1",
+                  "type": "text",
+                  "description": "Required - Prediction Option ID"
+                },
+                {
+                  "key": "comment[text]",
+                  "value": "My prediction comment",
+                  "type": "text",
+                  "description": "Optional - Comment text"
+                },
+                {
+                  "key": "comment[file]",
+                  "type": "file",
+                  "description": "Optional - Image file (max 10MB, mimes: jpeg,jpg,png,webm)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/user-predictions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user-predictions"]
+            }
+          }
+        },
+        {
+          "name": "Update User Prediction",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"prediction_option_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/user-predictions/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user-predictions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User Prediction",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/user-predictions/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user-predictions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Prediction Likes",
+      "item": [
+        {
+          "name": "Toggle Prediction Like",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/prediction-likes/:id/toggle",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "prediction-likes", ":id", "toggle"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Prediction Forwards",
+      "item": [
+        {
+          "name": "Forward Prediction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"prediction_id\": 1,\n    \"target\": \"telegram\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/prediction-forwards",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "prediction-forwards"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Activity",
+      "item": [
+        {
+          "name": "Log Activity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"action\": \"feed_view\",\n    \"subject_id\": 1,\n    \"subject_type\": \"App\\\\Models\\\\Prediction\",\n    \"metadata\": {\n        \"duration\": 30,\n        \"scroll_percentage\": 50\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Logs an activity. Action must be one of: feed_view, feed_scroll, feed_time_spent, prediction_impression, prediction_view, prediction_time_spent, prediction_fully_watched, prediction_confidence, profile_visit, tag_click, tag_search, search_query, notification_view, notification_click, app_open, app_background, app_close, error_frontend, error_api, custom"
+          },
+          "url": {
+            "raw": "{{base_url}}/api/v1/activity",
+            "host": ["{{base_url}}"],
+            "path": ["api", "v1", "activity"]
+          }
+        }
+      ]
+    }
+  ]
+}
