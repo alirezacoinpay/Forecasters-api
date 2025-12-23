@@ -5,6 +5,9 @@ use App\Jobs\LogActivityJob;
 use App\Models\Prediction;
 use App\Services\ActivityLogger\ActivityLogger;
 use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Bus::fake();

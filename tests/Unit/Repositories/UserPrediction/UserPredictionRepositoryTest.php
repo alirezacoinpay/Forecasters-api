@@ -31,18 +31,17 @@ test('findById includes likes when authenticated', function () {
 });
 
 test('togglePredictionLike creates like when not exists', function () {
-    $prediction = Mockery::mock(UserPrediction::class);
+    $prediction = Mockery::mock(\App\Models\Prediction::class);
+    $query = Mockery::mock(Builder::class);
     
-    $this->model->shouldReceive('find')->with(1)->once()->andReturn($prediction);
+    \App\Models\Prediction::shouldReceive('find')->with(1)->once()->andReturn($prediction);
     
-    PredictionLike::shouldReceive('where')->with('user_prediction_id', 1)->once()
-        ->andReturnSelf();
-    PredictionLike::shouldReceive('where')->with('user_id', 1)->once()
-        ->andReturnSelf();
-    PredictionLike::shouldReceive('first')->once()->andReturn(null);
+    PredictionLike::shouldReceive('where')->with('prediction_id', 1)->once()->andReturn($query);
+    $query->shouldReceive('where')->with('user_id', 1)->once()->andReturn($query);
+    $query->shouldReceive('first')->once()->andReturn(null);
     
     PredictionLike::shouldReceive('create')->with([
-        'user_prediction_id' => 1,
+        'prediction_id' => 1,
         'user_id' => 1,
     ])->once()->andReturn(true);
     
@@ -52,16 +51,15 @@ test('togglePredictionLike creates like when not exists', function () {
 });
 
 test('togglePredictionLike deletes like when exists', function () {
-    $prediction = Mockery::mock(UserPrediction::class);
+    $prediction = Mockery::mock(\App\Models\Prediction::class);
     $existingLike = Mockery::mock(PredictionLike::class);
+    $query = Mockery::mock(Builder::class);
     
-    $this->model->shouldReceive('find')->with(1)->once()->andReturn($prediction);
+    \App\Models\Prediction::shouldReceive('find')->with(1)->once()->andReturn($prediction);
     
-    PredictionLike::shouldReceive('where')->with('user_prediction_id', 1)->once()
-        ->andReturnSelf();
-    PredictionLike::shouldReceive('where')->with('user_id', 1)->once()
-        ->andReturnSelf();
-    PredictionLike::shouldReceive('first')->once()->andReturn($existingLike);
+    PredictionLike::shouldReceive('where')->with('prediction_id', 1)->once()->andReturn($query);
+    $query->shouldReceive('where')->with('user_id', 1)->once()->andReturn($query);
+    $query->shouldReceive('first')->once()->andReturn($existingLike);
     
     $existingLike->shouldReceive('delete')->once()->andReturn(true);
     
@@ -73,11 +71,12 @@ test('togglePredictionLike deletes like when exists', function () {
 test('findByIdWithLikes includes user like when userId provided', function () {
     $prediction = Mockery::mock(UserPrediction::class);
     $query = Mockery::mock(Builder::class);
+    $relationQuery = Mockery::mock(Builder::class);
     
     $this->model->shouldReceive('withTrashed')->once()->andReturn($query);
     $query->shouldReceive('withCount')->with('predictionLikes')->once()->andReturn($query);
-    $query->shouldReceive('with')->with(Mockery::on(function ($callback) {
-        return is_callable($callback);
+    $query->shouldReceive('with')->with(Mockery::on(function ($arg) {
+        return is_array($arg) && isset($arg['myPredictionLike']) && is_callable($arg['myPredictionLike']);
     }))->once()->andReturn($query);
     $query->shouldReceive('find')->with(1)->once()->andReturn($prediction);
     

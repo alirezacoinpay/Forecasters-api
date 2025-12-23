@@ -4,6 +4,9 @@ use App\Services\OpenAI\OpenAIService;
 use Illuminate\Support\Facades\Config;
 use Mockery;
 use ReflectionClass;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     // Set required config values before any test runs

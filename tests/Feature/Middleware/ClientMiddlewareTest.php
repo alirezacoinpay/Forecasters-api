@@ -3,12 +3,15 @@
 use App\Http\Middleware\EnsureIsClientMiddleware;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 test('it sanitizes input by stripping HTML tags', function () {
     $middleware = new EnsureIsClientMiddleware();
     $user = User::factory()->make(['id' => 1]);
     
-    auth()->guard('sanctum')->shouldReceive('user')->andReturn($user);
+    $guard = Mockery::mock(\Illuminate\Contracts\Auth\Guard::class);
+    $guard->shouldReceive('user')->andReturn($user);
+    Auth::shouldReceive('guard')->with('sanctum')->andReturn($guard);
     
     $request = Request::create('/test', 'POST', [
         'text' => '<script>alert("xss")</script>Hello',
@@ -23,9 +26,12 @@ test('it sanitizes input by stripping HTML tags', function () {
 test('it allows authenticated requests', function () {
     $middleware = new EnsureIsClientMiddleware();
     $user = User::factory()->make(['id' => 1]);
-    $request = Request::create('/test', 'GET');
     
-    auth()->guard('sanctum')->shouldReceive('user')->andReturn($user);
+    $guard = Mockery::mock(\Illuminate\Contracts\Auth\Guard::class);
+    $guard->shouldReceive('user')->andReturn($user);
+    Auth::shouldReceive('guard')->with('sanctum')->andReturn($guard);
+    
+    $request = Request::create('/test', 'GET');
     
     $response = $middleware->handle($request, function ($req) {
         return response()->json(['success' => true]);

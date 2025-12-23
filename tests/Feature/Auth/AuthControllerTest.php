@@ -58,7 +58,7 @@ test('verifyOtp returns token with valid OTP', function () {
     
     $this->repository->shouldReceive('findByMobileLight')
         ->with('09123456789')
-        ->twice()
+        ->once()
         ->andReturn($user);
     
     $response = $this->postJson('/api/v1/verify-otp', [

@@ -1,21 +1,24 @@
 <?php
 
 use App\Models\User;
-use App\Models\UserPrediction;
+use App\Models\Prediction;
 use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
+use App\Repositories\Prediction\PredictionRepositoryInterface;
 use Illuminate\Support\Facades\Bus;
 
 beforeEach(function () {
     $this->repository = Mockery::mock(UserPredictionRepositoryInterface::class);
+    $this->predictionRepository = Mockery::mock(PredictionRepositoryInterface::class);
     $this->app->instance(UserPredictionRepositoryInterface::class, $this->repository);
+    $this->app->instance(PredictionRepositoryInterface::class, $this->predictionRepository);
     Bus::fake();
 });
 
 test('it toggles prediction like successfully', function () {
     $user = User::factory()->make(['id' => 1]);
-    $prediction = UserPrediction::factory()->make(['id' => 1]);
+    $prediction = Prediction::factory()->make(['id' => 1]);
     
-    $this->repository->shouldReceive('findByIdLight')
+    $this->predictionRepository->shouldReceive('findByIdLight')
         ->with(1)
         ->once()
         ->andReturn($prediction);
@@ -38,7 +41,7 @@ test('it toggles prediction like successfully', function () {
 test('it returns 404 when prediction not found', function () {
     $user = User::factory()->make(['id' => 1]);
     
-    $this->repository->shouldReceive('findByIdLight')
+    $this->predictionRepository->shouldReceive('findByIdLight')
         ->with(999)
         ->once()
         ->andReturn(null);

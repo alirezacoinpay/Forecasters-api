@@ -4,6 +4,9 @@ use App\Enums\SmsTemplate;
 use App\Services\Sms\Providers\MelliPayamakProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Tests\TestCase;
+
+uses(TestCase::class);
 
 beforeEach(function () {
     Config::set('services.sms.melliPayamak.baseUrl', 'https://test.com/');

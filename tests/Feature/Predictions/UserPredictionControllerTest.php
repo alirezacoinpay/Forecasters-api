@@ -27,7 +27,7 @@ test('it returns prediction resource when found', function () {
         ->andReturn($prediction);
     
     $response = $this->actingAs($user, 'sanctum')
-        ->getJson('/api/v1/predictions/1');
+        ->getJson('/api/v1/user-predictions/1');
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
@@ -35,11 +35,12 @@ test('it returns prediction resource when found', function () {
 
 test('it creates prediction with valid data', function () {
     $user = User::factory()->make(['id' => 1]);
-    $option = PredictionOption::factory()->make(['id' => 1, 'prediction_id' => 1]);
+    // Create option without specifying ID to avoid conflicts
+    $option = PredictionOption::factory()->create(['prediction_id' => 1]);
     $prediction = UserPrediction::factory()->make(['id' => 1]);
     
     $this->predictionRepository->shouldReceive('findPredictionOptionByIdLight')
-        ->with(1)
+        ->with($option->id)
         ->once()
         ->andReturn($option);
     
@@ -48,9 +49,12 @@ test('it creates prediction with valid data', function () {
         ->andReturn($prediction);
     
     $response = $this->actingAs($user, 'sanctum')
-        ->postJson('/api/v1/predictions', [
-            'prediction_option_id' => 1,
+        ->postJson('/api/v1/user-predictions', [
+            'prediction_option_id' => $option->id,
         ]);
+    
+    // Clean up
+    $option->delete();
     
     $response->assertStatus(200)
         ->assertJson(['success' => true]);
@@ -70,7 +74,7 @@ test('it returns 404 when prediction option not found', function () {
         ->andReturn(null);
     
     $response = $this->actingAs($user, 'sanctum')
-        ->postJson('/api/v1/predictions', [
+        ->postJson('/api/v1/user-predictions', [
             'prediction_option_id' => 999,
         ]);
     
