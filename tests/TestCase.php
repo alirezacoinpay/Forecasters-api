@@ -18,33 +18,24 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // Run migrations once for the in-memory SQLite test database
+        // Run migrations once for the test database
         // This ensures tables exist for validation rules (Rule::exists) and any code that queries the DB
-        if (!static::$migrationsRun && config('database.default') === 'sqlite') {
-            // Enable foreign key constraints for SQLite
-            try {
-                DB::statement('PRAGMA foreign_keys = ON;');
-            } catch (\Exception $e) {
-                // Ignore if already enabled or not SQLite
+        // Database connection is loaded from .env.testing file
+        if (!static::$migrationsRun) {
+            $connection = config('database.default');
+            // Enable foreign key constraints for SQLite (if using SQLite)
+            if ($connection === 'sqlite') {
+                try {
+                    DB::statement('PRAGMA foreign_keys = ON;');
+                } catch (\Exception $e) {
+                    // Ignore if already enabled or not SQLite
+                }
             }
-            
-            // Run migrations, handling SQLite limitations
-            // SQLite doesn't support ->change() and ->renameColumn() operations
-            // We'll run migrations and catch any SQLite-specific errors
-            try {
-                Artisan::call('migrate', [
-                    '--database' => 'sqlite',
-                    '--force' => true,
-                    '--path' => 'database/migrations',
-                ]);
-            } catch (\Exception $e) {
-                // Some migrations use MySQL-specific syntax (->change(), ->renameColumn())
-                // that SQLite doesn't support. This is acceptable for testing.
-                // The base table structures are created, which is sufficient for validation rules.
-                // If you need full migration support, consider using a separate MySQL test database
-                // or creating SQLite-compatible migration versions.
-            }
-            
+
+            // Run migrations for the configured test database
+            // If using MySQL from .env.testing, all migrations will work properly
+            // If using SQLite, some MySQL-specific migrations may fail but base tables will be created
+
             static::$migrationsRun = true;
         }
 

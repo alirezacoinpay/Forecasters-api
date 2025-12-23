@@ -72,11 +72,11 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
     });
 
     Route::controller(UserPredictionController::class)->group( function () {
-        Route::get('/predictions/{id}', 'show');
-        Route::get('/predictions', 'index');
-        Route::post('/predictions', 'store');
-        Route::put('/predictions/{id}', 'update');
-        Route::delete('/predictions/{id}', 'destroy');
+        Route::get('/user-predictions/{id}', 'show');
+        Route::get('/user-predictions', 'index');
+        Route::post('/user-predictions', 'store');
+        Route::put('/user-predictions/{id}', 'update');
+        Route::delete('/user-predictions/{id}', 'destroy');
     });
 
     Route::controller(PredictionLikeController::class)->group( function () {

@@ -18,7 +18,6 @@ class UpdateUserPredictionRequest extends FormRequest
     {
         return [
             'prediction_option_id' => ['required', 'integer', Rule::exists(PredictionOption::class, 'id')],
-
         ];
     }
 }
