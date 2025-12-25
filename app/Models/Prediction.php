@@ -63,9 +63,13 @@ class Prediction extends BaseModel
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'prediction_tags');
+        return $this->belongsToMany(
+            Tag::class,
+            'prediction_tags',     // pivot table name
+            'prediction_id',       // foreign key on pivot table referencing Prediction
+            'tag_id'               // foreign key on pivot table referencing Tag
+        );
     }
-
     public function userPrediction(): HasOneThrough
     {
         return $this->hasOneThrough(

@@ -25,7 +25,7 @@ class PredictionForm
                 Select::make('category_id')
                     ->relationship('category', 'title'),
                 Select::make('user_id')
-                    ->relationship('user', 'mobile'),
+                    ->relationship('user', 'id'),
                 Select::make('topic_id')
                     ->relationship('topic', 'title'),
 

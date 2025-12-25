@@ -135,6 +135,13 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
         }
 
         if (isset($params['tag_id'])) {
+
+            $query->whereHas('tags' , function ($query) use ($params) {
+                $query->where('tags.id', $params['tag_id']);
+            });
+        }
+
+        if (isset($params['topic_id'])) {
             $query->where('topic_id', $params['topic_id']);
         }
 

@@ -2,13 +2,8 @@
 
 namespace App\Filament\Resources\Comments\Tables;
 
-use App\Models\Prediction;
-use App\Models\User;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+
 use Filament\Actions\ViewAction;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -34,7 +29,7 @@ class CommentsTable
 
                 SelectFilter::make('user_id')
                     ->label('User')
-                    ->relationship('user', 'mobile')
+                    ->relationship('user', 'id')
                     ->searchable()
                     ->preload()
                     ->native(false),
