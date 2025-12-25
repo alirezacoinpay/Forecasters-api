@@ -31,7 +31,7 @@ return [
         "schema" => [
             "type" => "object",
             "properties" => [
-                "questions" => [
+                "predictions" => [
                     "type" => "array",
                     "items" => [
                         "type" => "object",
@@ -55,7 +55,7 @@ return [
                     ]
                 ]
             ],
-            "required" => ["questions"],
+            "required" => ["predictions"],
             "additionalProperties" => false
         ],
         "strict" => true

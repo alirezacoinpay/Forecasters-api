@@ -20,6 +20,10 @@ return new class extends Migration
 
             $table->unsignedBigInteger('topic_id')->nullable();
             $table->foreign('topic_id')->references('id')->on('topics');
+
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+
             $table->dateTime('closes_at')->nullable();
             $table->dateTime('starts_at')->nullable();
             $table->dateTime('resolve_at')->nullable();

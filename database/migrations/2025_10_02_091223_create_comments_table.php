@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('file')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('comments')->cascadeOnDelete();
+
+            $table->unsignedBigInteger('prediction_id');
+            $table->foreign('prediction_id')->references('id')->on('predictions')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
