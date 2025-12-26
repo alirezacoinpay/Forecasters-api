@@ -12,6 +12,7 @@ class CommentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'user_id' => $this->user_id,
             'parent_id' => $this->parent_id,
             'prediction_id' => $this->prediction_id,
@@ -24,9 +25,10 @@ class CommentResource extends JsonResource
             'children' => CommentResource::collection($this->whenLoaded('children')),
             'childrenCount' => $this->whenCounted('children'),
             'likesCount' => $this->whenCounted('commentLikes'),
-            'isLiked' => $this->whenLoaded('myCommentLike', function () {
-                return $this->myCommentLike !== null;
+            'isLikedByMe' => $this->whenLoaded('commentLikes', function () {
+                return $this->isLikedByMe;
             }),
+
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\Client\Comments\UpdateCommentRequest;
 use App\Http\Resources\Client\CommentResource;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -27,6 +28,7 @@ class CommentController extends Controller
     public function store(AddCommentRequest $request): JsonResponse
     {
         $validated = $request->validated();
+        $validated['user_id'] = Auth::user()->getAuthIdentifier();
         $comment = $this->repository->create($validated);
 
         return $this->success(new CommentResource($comment), 'api.created.comment');

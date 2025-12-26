@@ -47,4 +47,15 @@ class Comment extends BaseModel
     {
         return $this->hasOne(CommentLike::class)->where('user_id', auth()->id());
     }
+
+    public function getIsLikedByMeAttribute(): bool
+    {
+        if (! auth()->check()) {
+            return false;
+        }
+
+        return $this->relationLoaded('commentLikes')
+            ? $this->commentLikes->contains('user_id', auth()->id())
+            : false;
+    }
 }
