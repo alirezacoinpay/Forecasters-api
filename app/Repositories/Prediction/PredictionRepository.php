@@ -109,6 +109,13 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
         if (isset($params['topic_id'])) {
             $query->where('topic_id', $params['topic_id']);
         }
+        if (isset($params['search'])) {
+            $query->whereLike('title', $params['search'])
+            ->orWhereLike('text', $params['search'])
+            ->orWhereHas('user', function ($query) use ($params) {
+                $query->where('username', $params['search']);
+            });
+        }
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
         if (!empty($params['paginate'])) {

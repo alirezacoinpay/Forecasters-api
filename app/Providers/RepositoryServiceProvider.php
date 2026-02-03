@@ -26,6 +26,9 @@ use App\Repositories\{
     UserPrediction\UserPredictionCacheRepository,
     UserPrediction\UserPredictionRepository,
     UserPrediction\UserPredictionRepositoryInterface,
+    UserSearchHistory\UserSearchHistoryCacheRepository,
+    UserSearchHistory\UserSearchHistoryRepository,
+    UserSearchHistory\UserSearchHistoryRepositoryInterface,
     User\UserCacheRepository,
     User\UserRepository,
     User\UserRepositoryInterface,
@@ -38,25 +41,16 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (env('DATABASE_CACHE', true)) {
-            $this->bindRepository(CategoryRepositoryInterface::class, CategoryRepository::class, CategoryCacheRepository::class);
-            $this->bindRepository(CommentRepositoryInterface::class, CommentRepository::class, CommentCacheRepository::class);
-            $this->bindRepository(PredictionRepositoryInterface::class, PredictionRepository::class, PredictionCacheRepository::class);
-            $this->bindRepository(PredictionForwardRepositoryInterface::class, PredictionForwardRepository::class, PredictionForwardCacheRepository::class);
-            $this->bindRepository(TagRepositoryInterface::class, TagRepository::class, TagCacheRepository::class);
-            $this->bindRepository(TopicRepositoryInterface::class, TopicRepository::class, TopicCacheRepository::class);
-            $this->bindRepository(UserPredictionRepositoryInterface::class, UserPredictionRepository::class, UserPredictionCacheRepository::class);
-            $this->bindRepository(UserRepositoryInterface::class, UserRepository::class, UserCacheRepository::class);
-        }else{
-            $this->bindRepository(CategoryRepositoryInterface::class, CategoryRepository::class, CategoryRepository::class);
-            $this->bindRepository(CommentRepositoryInterface::class, CommentRepository::class, CommentRepository::class);
-            $this->bindRepository(PredictionRepositoryInterface::class, PredictionRepository::class, PredictionRepository::class);
-            $this->bindRepository(PredictionForwardRepositoryInterface::class, PredictionForwardRepository::class, PredictionForwardRepository::class);
-            $this->bindRepository(TagRepositoryInterface::class, TagRepository::class, TagRepository::class);
-            $this->bindRepository(TopicRepositoryInterface::class, TopicRepository::class, TopicRepository::class);
-            $this->bindRepository(UserPredictionRepositoryInterface::class, UserPredictionRepository::class, UserPredictionRepository::class);
-            $this->bindRepository(UserRepositoryInterface::class, UserRepository::class, UserRepository::class);
-        }
+        $this->bindRepository(CategoryRepositoryInterface::class, CategoryRepository::class, CategoryCacheRepository::class);
+        $this->bindRepository(CommentRepositoryInterface::class, CommentRepository::class, CommentCacheRepository::class);
+        $this->bindRepository(PredictionRepositoryInterface::class, PredictionRepository::class, PredictionCacheRepository::class);
+        $this->bindRepository(PredictionForwardRepositoryInterface::class, PredictionForwardRepository::class, PredictionForwardCacheRepository::class);
+        $this->bindRepository(TagRepositoryInterface::class, TagRepository::class, TagCacheRepository::class);
+        $this->bindRepository(TopicRepositoryInterface::class, TopicRepository::class, TopicCacheRepository::class);
+        $this->bindRepository(UserPredictionRepositoryInterface::class, UserPredictionRepository::class, UserPredictionCacheRepository::class);
+        $this->bindRepository(UserRepositoryInterface::class, UserRepository::class, UserCacheRepository::class);
+        $this->bindRepository(UserSearchHistoryRepositoryInterface::class, UserSearchHistoryRepository::class, UserSearchHistoryCacheRepository::class);
+
     }
 
 
@@ -66,8 +60,18 @@ class RepositoryServiceProvider extends ServiceProvider
     }
     private function bindRepository(string $interface, string $plainRepository, string $cacheRepository): void
     {
-        $this->app->bind($interface, function ($app) use ($plainRepository, $cacheRepository) {
-            return env('CACHE_DB', false) ? $app->make($cacheRepository) : $app->make($plainRepository);
-        });
+
+        if (env('DATABASE_CACHE', true)){
+
+            $this->app->bind($interface, function ($app) use ($plainRepository, $cacheRepository) {
+                return env('CACHE_DB', false) ? $app->make($cacheRepository) : $app->make($plainRepository);
+            });
+        }else{
+
+            $this->app->bind($interface, function ($app) use ($plainRepository, $cacheRepository) {
+                return env('CACHE_DB', false) ? $app->make($cacheRepository) : $app->make($plainRepository);
+            });
+        }
+
     }
 }

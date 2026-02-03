@@ -14,6 +14,7 @@ use App\Http\Controllers\Client\{
     PredictionForwardController,
     FeedController,
     SearchController,
+    UserSearchHistoryController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,10 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
         Route::post('/comments', 'store');
         Route::put('/comments/{id}', 'update');
         Route::delete('/comments/{id}', 'destroy');
+    });
+
+    Route::controller(UserSearchHistoryController::class)->group( function () {
+        Route::post('/search-history', 'index');
     });
 
     Route::controller(CommentLikeController::class)->group( function () {
