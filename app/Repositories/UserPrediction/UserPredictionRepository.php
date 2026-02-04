@@ -2,6 +2,7 @@
 
 namespace App\Repositories\UserPrediction;
 
+use App\Models\Prediction;
 use App\Models\UserPrediction;
 use App\Models\PredictionLike;
 use App\Repositories\BaseRepository;
@@ -13,6 +14,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
     protected Model $model;
     public function __construct(
          UserPrediction $model,
+        protected Prediction $predictionModel,
         protected PredictionLike $predictionLike,
     )
     {
@@ -54,7 +56,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     public function togglePredictionLike($predictionId, $userId)
     {
-        $prediction = $this->model->find($predictionId);
+        $prediction = $this->predictionModel->find($predictionId);
 
         if (!$prediction) {
             return null;
