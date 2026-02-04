@@ -44,7 +44,11 @@ class PredictionLikeController extends Controller
 
         $message = $isLiked ? 'api.liked.prediction' : 'api.unliked.prediction';
 
-        return $this->success(['is_liked' => $isLiked], $message);
+        $prediction->loadCount('predictionLikes');
+        return $this->success([
+            'is_liked' => $isLiked,
+            'likesCount' => $prediction->prediction_likes_count,
+            ], $message);
     }
 }
 

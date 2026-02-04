@@ -13,6 +13,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
     protected Model $model;
     public function __construct(
          UserPrediction $model,
+        protected PredictionLike $predictionLike,
     )
     {
         parent::__construct($model);
@@ -53,13 +54,13 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     public function togglePredictionLike($predictionId, $userId)
     {
-        $prediction = \App\Models\Prediction::find($predictionId);
+        $prediction = $this->model->find($predictionId);
 
         if (!$prediction) {
             return null;
         }
 
-        $existingLike = PredictionLike::where('prediction_id', $predictionId)
+        $existingLike = $this->predictionLike->where('prediction_id', $predictionId)
             ->where('user_id', $userId)
             ->first();
 
@@ -67,7 +68,7 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
             $existingLike->delete();
             return false; // Unliked
         } else {
-            PredictionLike::create([
+            $this->predictionLike->create([
                 'prediction_id' => $predictionId,
                 'user_id' => $userId,
             ]);

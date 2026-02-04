@@ -6,6 +6,7 @@ use App\Repositories\BaseRepositoryInterface;
 
 interface PredictionRepositoryInterface extends BaseRepositoryInterface
 {
+    public function insertPredictionOptions($data);
     public function findPredictionOptionById($id);
     public function findPredictionOptionByIdLight($id);
     public function findFeedPage($id);

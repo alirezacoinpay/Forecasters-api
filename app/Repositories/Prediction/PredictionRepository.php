@@ -24,6 +24,11 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
         return $this->model->withTrashed()->find($id);
     }
 
+    public function insertPredictionOptions($data)
+    {
+        return $this->predictionOptionModel->newQuery()->insert($data);
+    }
+
     public function findFeedPage($id)
     {
         return $this->model
@@ -46,7 +51,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
             ->with(['userPrediction' => function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             }])
-            ->withCount(['userPredictions', 'comments'])
+            ->withCount(['userPredictions', 'comments', 'predictionLikes'])
             ->with(['comments' => function ($query) {
                 $query->with(['user'])
                 ->withCount(['children']);
@@ -104,7 +109,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
             ->with(['tags', 'user', 'comments.commentLikes', 'predictionOptions' => function ($query) {
                 $query->withCount('userPredictions');
             }])
-            ->withCount(['comments', 'userPredictions', 'predictionForwards']);
+            ->withCount(['comments', 'userPredictions', 'predictionLikes', 'predictionForwards']);
 
         if (isset($params['topic_id'])) {
             $query->where('topic_id', $params['topic_id']);

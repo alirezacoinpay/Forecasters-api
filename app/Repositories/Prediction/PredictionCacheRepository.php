@@ -109,4 +109,9 @@ class PredictionCacheRepository extends BaseCacheRepository implements Predictio
         });
     }
 
+    public function insertPredictionOptions($data)
+    {
+        $this->repository->insertPredictionOptions($data);
+    }
+
 }

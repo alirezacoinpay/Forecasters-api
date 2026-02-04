@@ -26,6 +26,7 @@ class PredictionResource extends JsonResource
             'commentsCount' => $this->whenCounted('commentsCount'),
             'user' => new UserResource($this->whenLoaded('user')),
             'predictionForwardCount' => $this->whenCounted('predictionForwards'),
+            'predictionLikes' => $this->whenCounted('predictionLikes'),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'userPredictions' => CommentResource::collection($this->whenLoaded('userPredictions')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),

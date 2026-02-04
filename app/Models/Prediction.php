@@ -36,6 +36,11 @@ class Prediction extends BaseModel
         return $this->hasMany(PredictionForward::class);
     }
 
+    public function predictionLikes(): HasMany
+    {
+        return $this->hasMany(PredictionLike::class);
+    }
+
     public function predictionOptions(): HasMany
     {
         return $this->hasMany(PredictionOption::class );
