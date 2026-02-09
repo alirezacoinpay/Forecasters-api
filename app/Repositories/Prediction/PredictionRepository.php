@@ -106,23 +106,32 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         $query = $this->model
             ->newQuery()
+//            ;
             ->with(['tags', 'user', 'comments.commentLikes', 'predictionOptions' => function ($query) {
                 $query->withCount('userPredictions');
             }])
             ->withCount(['comments', 'userPredictions', 'predictionLikes', 'predictionForwards']);
 
         if (isset($params['topic_id'])) {
-            $query->where('topic_id', $params['topic_id']);
+            $query->orWhere('topic_id', $params['topic_id']);
+        }
+
+        if (isset($params['tag_id'])) {
+
+            $query->orWhereHas('tags' , function ($query) use ($params) {
+                $query->where('tags.id', $params['tag_id']);
+            });
         }
         if (isset($params['search'])) {
-            $query->whereLike('title', $params['search'])
-            ->orWhereLike('text', $params['search'])
+            $query->whereLike('title', '%' . $params['search'] . '%')
+            ->orWhereLike('text', '%' . $params['search'] . '%')
             ->orWhereHas('user', function ($query) use ($params) {
-                $query->where('username', $params['search']);
+                $query->where('username', '%' . $params['search'] . '%');
             });
         }
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
+//        dd($query->toSql());
         if (!empty($params['paginate'])) {
             return $query->paginate($params['paginate']);
         }else{

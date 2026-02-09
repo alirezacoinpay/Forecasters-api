@@ -38,6 +38,20 @@ class UserSearchHistoryRepository extends BaseRepository implements UserSearchHi
         }
 
     }
+    public function userSearchPredictions($userId, $params = [])
+    {
+        $query = $this->model->newQuery();
+        $query->where('user_id', $userId);
+
+        $query->orderBy('id', $params['sort'] ?? 'desc');
+        if (!empty($params['paginate'])) {
+            return $query->paginate($params['paginate']);
+        }else{
+
+            return $query->get();
+        }
+
+    }
 
     public function storeFromFeed(int $userId, array $params): void
     {

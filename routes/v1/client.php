@@ -53,8 +53,7 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
     });
 
     Route::controller(SearchController::class)->group( function () {
-        Route::get('/search-history', 'searchHistory');
-        Route::get('/search', 'search');
+        Route::get('/search-history', 'search');
     });
 
     Route::controller(CommentController::class)->group( function () {

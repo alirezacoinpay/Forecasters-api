@@ -58,4 +58,12 @@ class UserSearchHistoryCacheRepository extends BaseCacheRepository implements Us
         $this->repository->storeFromFeed($userId, $params);
     }
 
+    public function userSearchPredictions($userId, $params = [])
+    {
+        $key = $this->generateKey([$userId, $params]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId, $params) {
+            return  $this->repository->userSearchPredictions($userId, $params);
+        });
+    }
 }

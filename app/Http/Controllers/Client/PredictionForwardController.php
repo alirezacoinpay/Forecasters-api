@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\PredictionForwards\AddPredictionForwardRequest;
-use App\Http\Resources\PredictionForwardResource;
+use App\Http\Resources\Client\PredictionForwardResource;
 use App\Repositories\PredictionForward\PredictionForwardRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 

@@ -24,12 +24,14 @@ class FeedController extends Controller
     {
         $validated = $request->validated();
 
-        $this->userSearchHistoryRepository->storeFromFeed(
-            userId: $this->userId,
-            params: $validated
-        );
-
         $predictions = $this->repository->userFeedPredictions($this->userId, $validated);
+
+        if (count($predictions) > 0) {
+            $this->userSearchHistoryRepository->storeFromFeed(
+                userId: $this->userId,
+                params: $validated
+            );
+        }
 
         return $this->success(PredictionResource::collection($predictions));
     }

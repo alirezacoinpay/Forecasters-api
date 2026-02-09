@@ -7,4 +7,6 @@ use App\Repositories\BaseRepositoryInterface;
 interface UserSearchHistoryRepositoryInterface extends BaseRepositoryInterface
 {
     public function storeFromFeed(int $userId, array $params): void;
+
+    public function userSearchPredictions($userId, $params = []);
 }
