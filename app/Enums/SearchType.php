@@ -7,6 +7,7 @@ enum SearchType: string
 {
     use ArrayableEnum;
     case TEXT = 'text';
+
     case TAG = 'tag';
     case TOPIC = 'topic';
     case CATEGORY = 'category';

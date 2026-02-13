@@ -4,6 +4,7 @@ namespace App\Repositories\UserSearchHistory;
 
 use App\Enums\SearchType;
 use App\Models\Tag;
+use App\Models\Topic;
 use App\Models\UserSearchHistory;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,7 @@ class UserSearchHistoryRepository extends BaseRepository implements UserSearchHi
     public function userSearchPredictions($userId, $params = [])
     {
         $query = $this->model->newQuery();
+        $query->with(['searchable']);
         $query->where('user_id', $userId);
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
@@ -59,7 +61,16 @@ class UserSearchHistoryRepository extends BaseRepository implements UserSearchHi
             $this->storeTextSearch($userId, $params['search']);
         }
 
-        if (! empty($params['tag_id'])) {
+        if (!empty($params['topic_id'])) {
+            $this->storeModelSearch(
+                userId: $userId,
+                model: Topic::class,
+                modelId: $params['topic_id'],
+                type: SearchType::TOPIC
+            );
+        }
+
+        if (!empty($params['tag_id'])) {
             $this->storeModelSearch(
                 userId: $userId,
                 model: Tag::class,

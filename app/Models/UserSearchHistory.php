@@ -11,6 +11,8 @@ class UserSearchHistory extends BaseModel
 
     protected $fillable = [
         'user_id',
+        'searchable_type',
+        'searchable_id',
         'search_text',
     ];
 
