@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\Auth\SendOtpRequest;
 use App\Http\Requests\Client\Auth\VerifyOtpRequest;
 use App\Http\Requests\Client\User\EditProfileRequest;
+use App\Http\Resources\Client\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -20,8 +21,11 @@ class UserController extends Controller
     public function me() : JsonResponse
     {
         $user = auth()->user();
-        $user->load('userPredictions');
-        return $this->success(['user' => $user]);
+        $user->load([
+            'userPredictions.prediction.predictionOptions',
+            'userPredictions.predictionOption'
+        ])->loadCount('userPredictions');
+        return $this->success(['user' => new UserResource($user)]);
     }
 
     public function editProfile(EditProfileRequest $request): JsonResponse

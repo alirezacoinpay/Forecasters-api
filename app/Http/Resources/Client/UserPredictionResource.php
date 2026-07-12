@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Client;
 
+use App\Helpers\DateHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,6 +21,7 @@ class UserPredictionResource extends JsonResource
             }),
             'prediction' => new PredictionResource($this->whenLoaded('prediction')),
             'predictionOption' => new PredictionOptionResource($this->whenLoaded('predictionOption')),
+            'timePast' => DateHelper::shortTimeAgo($this->created_at),
         ];
     }
 }

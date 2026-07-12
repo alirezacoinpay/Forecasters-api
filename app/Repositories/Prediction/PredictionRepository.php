@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Prediction;
 
+use App\Models\Comment;
 use App\Models\Prediction;
 use App\Models\PredictionOption;
 use App\Repositories\BaseRepository;
@@ -14,6 +15,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     public function __construct(
          Prediction $model,
          protected PredictionOption $predictionOptionModel,
+         protected Comment $commentModel,
     )
     {
         parent::__construct($model);
@@ -61,6 +63,15 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
             }])
             ->find($id);
     }
+    public function predictionComments($id, $params = [])
+    {
+        return $this->commentModel
+            ->newQuery()
+            ->withCount(['user', 'commentLikes'])
+            ->where('prediction_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->paginate($params['paginate'] ?? 10);
+    }
 
     public function findPredictionOptionByIdLight($id)
     {
@@ -106,9 +117,9 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         $query = $this->model
             ->newQuery()
-//            ;
-            ->with(['tags', 'user', 'comments.commentLikes', 'predictionOptions' => function ($query) {
-                $query->withCount('userPredictions');
+            ->with(['tags', 'user', 'predictionOptions' => function ($query) {
+                $query->withCount('userPredictions')
+                    ->with('myPrediction');
             }])
             ->withCount(['comments', 'userPredictions', 'predictionLikes', 'predictionForwards']);
 

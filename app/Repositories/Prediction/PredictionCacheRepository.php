@@ -100,6 +100,14 @@ class PredictionCacheRepository extends BaseCacheRepository implements Predictio
           return  $this->repository->userFeedPredictions($userId, $params);
         });
     }
+    public function predictionComments($userId, $params = [])
+    {
+        $key = $this->generateKey([$userId, $params]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId, $params) {
+          return  $this->repository->predictionComments($userId, $params);
+        });
+    }
     public function userSearchPredictions($userId = null, $params = [])
     {
         $key = $this->generateKey([$userId = null, $params]);

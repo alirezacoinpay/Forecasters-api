@@ -11,6 +11,7 @@ interface PredictionRepositoryInterface extends BaseRepositoryInterface
     public function findPredictionOptionByIdLight($id);
     public function findFeedPage($id);
     public function userFeedPrediction($id, $userId = null);
+    public function predictionComments($id, $params = []);
     public function userFeedPredictions($userId = null, $params = []);
     public function userSearchPredictions($userId = null, $params = []);
 }

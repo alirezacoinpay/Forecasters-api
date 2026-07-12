@@ -19,6 +19,7 @@ class PredictionOptionResource extends JsonResource
             'userPredictionsCount' => $this->whenCounted('userPredictions'),
             'userPredictions' => UserPredictionResource::collection($this->whenLoaded('userPredictions')),
             'prediction' => new PredictionResource($this->whenLoaded('prediction')),
+            'myPrediction' => new PredictionResource($this->whenLoaded('myPrediction')),
         ];
     }
 }

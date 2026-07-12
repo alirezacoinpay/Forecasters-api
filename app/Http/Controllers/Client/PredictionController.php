@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\Predictions\AddPredictionsRequest;
+use App\Http\Requests\Client\Predictions\AllPredictionCommentsRequest;
+use App\Http\Resources\Client\CommentResource;
 use App\Http\Resources\Client\PredictionResource;
 use App\Models\PredictionOption;
 use App\Repositories\Prediction\PredictionRepositoryInterface;
@@ -25,6 +27,12 @@ class PredictionController extends Controller
         return $prediction
             ? $this->success(new PredictionResource($prediction))
             : $this->error('api.not_found.prediction', [], 404);
+    }
+    public function comments(AllPredictionCommentsRequest $request, $id): JsonResponse
+    {
+        $validated = $request->validated();
+        $predictionComments = $this->repository->predictionComments($id, $validated);
+        return $this->success(CommentResource::collection($predictionComments));
     }
 
     public function store(AddPredictionsRequest $request): JsonResponse
