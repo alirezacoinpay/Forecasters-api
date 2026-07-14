@@ -53,13 +53,12 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
             ->with(['userPrediction' => function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             }])
-            ->withCount(['userPredictions', 'comments', 'predictionLikes'])
+            ->withCount(['comments', 'predictionLikes'])
             ->with(['comments' => function ($query) {
                 $query->with(['user'])
                 ->withCount(['children']);
             }, 'tags', 'predictionOptions' => function ($query) {
-                $query->withCount('userPredictions')
-                    ->with('myPrediction');
+                $query->withCount('userPredictions');
             }])
             ->find($id);
     }
@@ -121,6 +120,9 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
                 $query->withCount('userPredictions')
                     ->with('myPrediction');
             }])
+            ->with(['userPrediction' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])
             ->withCount(['comments', 'userPredictions', 'predictionLikes', 'predictionForwards']);
 
         if (isset($params['topic_id'])) {
@@ -142,7 +144,8 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
         }
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
-//        dd($query->toSql());
+
+
         if (!empty($params['paginate'])) {
             return $query->paginate($params['paginate']);
         }else{

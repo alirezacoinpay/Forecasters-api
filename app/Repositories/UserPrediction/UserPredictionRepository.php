@@ -91,5 +91,15 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
         return $query->find($id);
     }
+    public function findByPredictionAndUser($userId, $predictionId)
+    {
+        $query = $this->model
+            ->where('user_id', $userId)
+            ->whereHas('prediction', function ($q) use ($predictionId) {
+                $q->where('predictions.id', $predictionId);
+            });
+
+        return $query->first();
+    }
 
 }

@@ -67,5 +67,13 @@ class UserPredictionCacheRepository extends BaseCacheRepository implements UserP
            return $this->repository->findByIdWithLikes($id, $userId);
         });
     }
+    public function findByPredictionAndUser($userId, $predictionId)
+    {
+        $key = $this->generateKey([$userId, $predictionId]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId, $predictionId) {
+           return $this->repository->findByPredictionAndUser($userId, $predictionId);
+        });
+    }
 
 }

@@ -28,7 +28,8 @@ class PredictionResource extends JsonResource
             'predictionForwardCount' => $this->whenCounted('predictionForwards'),
             'predictionLikes' => $this->whenCounted('predictionLikes'),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
-            'userPredictions' => CommentResource::collection($this->whenLoaded('userPredictions')),
+            'userPrediction' => new UserPredictionResource($this->whenLoaded('userPrediction')),
+            'userPredictions' => UserPredictionResource::collection($this->whenLoaded('userPredictions')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'predictionOptions' => PredictionOptionResource::collection($this->whenLoaded('predictionOptions')),
         ];

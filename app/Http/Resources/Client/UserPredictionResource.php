@@ -22,6 +22,7 @@ class UserPredictionResource extends JsonResource
             'prediction' => new PredictionResource($this->whenLoaded('prediction')),
             'predictionOption' => new PredictionOptionResource($this->whenLoaded('predictionOption')),
             'timePast' => DateHelper::shortTimeAgo($this->created_at),
+            'created_at' => $this->created_at->format('F j Y'),
         ];
     }
 }

@@ -52,6 +52,12 @@ class UserPredictionController extends Controller
             return $this->error('api.predictionOption.not_found', [], 404);
         }
         $user = Auth::user();
+        $userPrediction = $this->repository->findByPredictionAndUser($user->id, $predictionOption->prediction_id);
+        if ($userPrediction) {
+            $userPrediction->update([
+                'prediction_option_id' => $predictionOption->id,
+            ]);
+        }
         $userPrediction = $this->repository->create([
             'user_id' => $user->getAuthIdentifier(),
             'prediction_option_id' => $predictionOption->id,
