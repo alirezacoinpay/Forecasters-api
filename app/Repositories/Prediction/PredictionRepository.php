@@ -117,7 +117,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         $query = $this->model
             ->newQuery()
-            ->with(['tags', 'userLike', 'user', 'predictionOptions' => function ($query) {
+            ->with(['tags', 'userLike', 'user.userProfile', 'predictionOptions' => function ($query) {
                 $query->withCount('userPredictions')
                     ->with('myPrediction');
             }])
