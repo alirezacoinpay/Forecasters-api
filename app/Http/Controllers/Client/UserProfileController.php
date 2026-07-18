@@ -38,8 +38,9 @@ class UserProfileController extends Controller
     {
         $userProfile = $this->repository->findByUserId($this->userId);
         if (isset($validated['avatar'])) {
-            $validated['avatar'] = FileHelper::uploadFile($validated['avatar'], UserProfile::FILE_PATH.'/avatars');
+            $validated['avatar'] = FileHelper::uploadFile($validated['avatar'], UserProfile::FILE_PATH);
         }
+        $validated['user_id'] = $this->userId;
         if ($userProfile) {
 
             FileHelper::deleteFile($userProfile->avatar);

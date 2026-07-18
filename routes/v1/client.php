@@ -95,7 +95,7 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
     });
 
     Route::controller(UserProfileController::class)->group( function () {
-        Route::put('/user-profile', 'update');
+        Route::put('/user-profiles', 'update');
     });
 
     Route::post('/activity', ActivityController::class)->middleware('throttle:60,1');

@@ -79,6 +79,7 @@ return [
     */
 
     'locale' => env('APP_LOCALE', 'en'),
+    'filesUrl' => env('FILES_URL'),
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 

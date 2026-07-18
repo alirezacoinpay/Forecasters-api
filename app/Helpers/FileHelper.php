@@ -8,7 +8,8 @@ class FileHelper
 {
     public static function uploadFile($file, $directory): string
     {
-        return Storage::disk('public')->putFile($directory, $file);
+        $filePath = Storage::disk('public')->putFile($directory, $file);
+        return basename($filePath);
     }
     public static function uploadPrivateFile($file, $directory): string
     {

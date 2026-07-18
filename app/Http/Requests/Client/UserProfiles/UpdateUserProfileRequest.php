@@ -17,7 +17,7 @@ class UpdateUserProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['nullable', 'string', Rule::unique(User::class, 'username')],
+            'username' => ['nullable', 'string'],
             'avatar' => ['nullable', 'image', Rule::file()],
         ];
     }
