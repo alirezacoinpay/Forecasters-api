@@ -25,9 +25,7 @@ class CommentResource extends JsonResource
             'children' => CommentResource::collection($this->whenLoaded('children')),
             'childrenCount' => $this->whenCounted('children'),
             'likesCount' => $this->whenCounted('commentLikes'),
-            'isLikedByMe' => $this->whenLoaded('commentLikes', function () {
-                return $this->isLikedByMe;
-            }),
+            'userLike' => $this->whenLoaded('userLike'),
 
         ];
     }

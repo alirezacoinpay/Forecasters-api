@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Prediction extends BaseModel
 {
@@ -85,6 +86,11 @@ class Prediction extends BaseModel
             'id',
             'id'
         );
+    }
+    public function userLike(): HasOne
+    {
+        return $this->hasOne(PredictionLike::class)
+            ->where('user_id', Auth::id() ?? null);
     }
 
     public function userPredictions(): HasManyThrough

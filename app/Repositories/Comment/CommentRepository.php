@@ -20,18 +20,10 @@ class CommentRepository extends BaseRepository implements CommentRepositoryInter
 
     public function findById($id)
     {
-        $query = $this->model->withTrashed();
-        
-        if (auth()->check()) {
-            $userId = auth()->id();
-            $query->withCount('commentLikes')
-                  ->with(['myCommentLike' => function ($q) use ($userId) {
-                      $q->where('user_id', $userId);
-                  }]);
-        } else {
-            $query->withCount('commentLikes');
-        }
-        
+        $query = $this->model
+            ->withCount('commentLikes')
+            ->with(['userLike']);
+
         return $query->find($id);
     }
 
@@ -63,7 +55,7 @@ class CommentRepository extends BaseRepository implements CommentRepositoryInter
     public function toggleCommentLike($commentId, $userId)
     {
         $comment = $this->model->find($commentId);
-        
+
         if (!$comment) {
             return null;
         }
@@ -87,13 +79,8 @@ class CommentRepository extends BaseRepository implements CommentRepositoryInter
     public function findByIdWithLikes($id, $userId = null)
     {
         $query = $this->model->withTrashed()
-            ->withCount('commentLikes');
-
-        if ($userId) {
-            $query->with(['myCommentLike' => function ($q) use ($userId) {
-                $q->where('user_id', $userId);
-            }]);
-        }
+            ->withCount('commentLikes')
+            ->with(['userLike']);
 
         return $query->find($id);
     }

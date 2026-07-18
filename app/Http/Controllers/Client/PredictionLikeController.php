@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Enums\ActivityAction;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Client\PredictionResource;
 use App\Repositories\Prediction\PredictionRepositoryInterface;
 use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
 use App\Services\ActivityLogger\ActivityLogger;
@@ -42,13 +43,10 @@ class PredictionLikeController extends Controller
             $prediction
         );
 
-        $message = $isLiked ? 'api.liked.prediction' : 'api.unliked.prediction';
-
-        $prediction->loadCount('predictionLikes');
+        $prediction = $this->predictionRepository->findFeedPage($id);
         return $this->success([
-            'is_liked' => $isLiked,
-            'likesCount' => $prediction->prediction_likes_count,
-            ], $message);
+            'prediction' => new PredictionResource($prediction),
+        ]);
     }
 }
 

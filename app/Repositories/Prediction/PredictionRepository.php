@@ -35,11 +35,11 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         return $this->model
             ->newQuery()
-            ->withCount(['userPredictions', 'comments'])
+            ->withCount(['userPredictions', 'comments', 'predictionLikes'])
             ->with(['comments' => function ($query) {
                 $query->with(['user'])
                 ->withCount(['children']);
-            }, 'tags', 'predictionOptions' => function ($query) {
+            }, 'tags', 'userLike', 'predictionOptions' => function ($query) {
                 $query->withCount('userPredictions')
                     ->with('myPrediction');
             }])
@@ -66,6 +66,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         return $this->commentModel
             ->newQuery()
+            ->with(['userLike'])
             ->withCount(['user', 'commentLikes'])
             ->where('prediction_id', $id)
             ->orderBy('created_at', 'desc')
@@ -116,7 +117,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         $query = $this->model
             ->newQuery()
-            ->with(['tags', 'user', 'predictionOptions' => function ($query) {
+            ->with(['tags', 'userLike', 'user', 'predictionOptions' => function ($query) {
                 $query->withCount('userPredictions')
                     ->with('myPrediction');
             }])

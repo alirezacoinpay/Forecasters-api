@@ -19,9 +19,6 @@ class AddPredictionsRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'text' => ['nullable', 'string'],
-            'topic_id' => ['required', Rule::exists(Topic::class, 'id')],
-            'starts_at' => ['nullable', Rule::date()->format("Y-m-d H:i")],
             'ends_at' => ['nullable', 'date'],
             'options' => ['nullable', 'array'],
         ];

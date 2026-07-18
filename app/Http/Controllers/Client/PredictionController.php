@@ -38,6 +38,7 @@ class PredictionController extends Controller
     public function store(AddPredictionsRequest $request): JsonResponse
     {
         $validated = $request->validated();
+        $validated['user_id'] = $this->userId;
         $prediction = $this->repository->create($validated);
         $predictionOptions = $validated['options'];
 

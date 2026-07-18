@@ -13,6 +13,7 @@ class UserResource extends JsonResource
         return [
             'username' => $this->username,
             'mobile' => $this->mobile,
+            'avatar' => $this->whenLoaded('userProfile', $this->userProfile->avatar),
             'userPredictionsCount' => $this->whenCounted('userPredictions', $this->userPredictionsCount),
             'userPredictions' => UserPredictionResource::collection($this->whenLoaded('userPredictions')),
         ];

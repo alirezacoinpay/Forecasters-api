@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Auth;
 
 class Comment extends BaseModel
 {
@@ -43,19 +44,8 @@ class Comment extends BaseModel
         return $this->hasMany(CommentLike::class);
     }
 
-    public function myCommentLike(): HasOne
+    public function userLike(): HasOne
     {
         return $this->hasOne(CommentLike::class)->where('user_id', auth()->id());
-    }
-
-    public function getIsLikedByMeAttribute(): bool
-    {
-        if (! auth()->check()) {
-            return false;
-        }
-
-        return $this->relationLoaded('commentLikes')
-            ? $this->commentLikes->contains('user_id', auth()->id())
-            : false;
     }
 }

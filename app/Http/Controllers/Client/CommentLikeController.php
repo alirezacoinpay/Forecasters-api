@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Enums\ActivityAction;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Client\CommentResource;
 use App\Repositories\Comment\CommentRepositoryInterface;
 use App\Services\ActivityLogger\ActivityLogger;
 use Illuminate\Http\JsonResponse;
@@ -40,10 +41,9 @@ class CommentLikeController extends Controller
             $isLiked ? ActivityAction::COMMENT_LIKE : ActivityAction::UNLIKE,
             $comment
         );
+        $comment = $this->repository->findById($id);
 
-        $message = $isLiked ? 'api.liked.comment' : 'api.unliked.comment';
-
-        return $this->success(['is_liked' => $isLiked], $message);
+        return $this->success(new CommentResource($comment));
     }
 }
 
