@@ -42,8 +42,9 @@ class UserProfileController extends Controller
         }
         $validated['user_id'] = $this->userId;
         if ($userProfile) {
+            if (isset($validated['avatar']))
+                FileHelper::deleteFile($userProfile->avatar);
 
-            FileHelper::deleteFile($userProfile->avatar);
             $this->repository->update($userProfile->id, $validated);
         }else{
             $validated['userId'] = $this->userId;

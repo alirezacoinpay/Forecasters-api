@@ -22,9 +22,7 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $user->load([
-            'userPredictions.prediction.predictionOptions',
-            'userProfile',
-            'userPredictions.predictionOption'
+            'userProfile'
         ])->loadCount('userPredictions');
         return $this->success(['user' => new UserResource($user)]);
     }

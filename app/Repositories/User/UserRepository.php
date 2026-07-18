@@ -19,7 +19,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function findById($id)
     {
-        return $this->model->find($id);
+        return $this->model
+            ->newQuery()
+            ->with('userProfile')
+            ->find($id);
     }
 
     public function findByIdLight($id)

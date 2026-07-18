@@ -41,7 +41,20 @@ class UserPredictionRepository extends BaseRepository implements UserPredictionR
 
     public function all($params = [])
     {
-        $query = $this->model->newQuery();
+        $query = $this->model
+            ->newQuery()
+            ->with([
+                'prediction' => function ($q) {
+                    $q->with([
+                        'userPrediction',
+                        'predictionOptions' => function ($q) {
+                            $q->withCount('userPredictions');
+                        }
+                    ])
+                        ->withCount('userPredictions');
+                },
+            ]);
+
 
 
         $query->orderBy('id', $params['sort'] ?? 'desc');

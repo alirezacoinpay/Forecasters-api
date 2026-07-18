@@ -38,7 +38,7 @@ class UserPredictionController extends Controller
         $validated = $request->validated();
         $userPredictions = $this->repository->all($validated);
 
-        return $this->success($userPredictions);
+        return $this->success(UserPredictionResource::collection($userPredictions));
     }
 
     public function store(AddUserPredictionRequest $request): JsonResponse
