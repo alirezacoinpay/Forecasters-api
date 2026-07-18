@@ -15,6 +15,7 @@ use App\Http\Controllers\Client\{
     FeedController,
     SearchController,
     UserSearchHistoryController,
+    UserProfileController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,10 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
 
     Route::controller(PredictionForwardController::class)->group( function () {
         Route::post('/prediction-forwards', 'store');
+    });
+
+    Route::controller(UserProfileController::class)->group( function () {
+        Route::put('/user-profile', 'update');
     });
 
     Route::post('/activity', ActivityController::class)->middleware('throttle:60,1');

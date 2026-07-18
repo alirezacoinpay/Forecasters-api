@@ -44,6 +44,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->bindRepository(UserProfileRepositoryInterface::class, UserProfileRepository::class, UserProfileCacheRepository::class);
         $this->bindRepository(CategoryRepositoryInterface::class, CategoryRepository::class, CategoryCacheRepository::class);
         $this->bindRepository(CommentRepositoryInterface::class, CommentRepository::class, CommentCacheRepository::class);
         $this->bindRepository(PredictionRepositoryInterface::class, PredictionRepository::class, PredictionCacheRepository::class);

@@ -51,5 +51,13 @@ class UserProfileCacheRepository extends BaseCacheRepository implements UserProf
           return  $this->repository->all($params);
         });
     }
+    public function findByUserId($userId)
+    {
+        $key = $this->generateKey([$userId]);
+
+        return Cache::tags($this->tag)->remember($key, $this->timeToLive, function () use ($userId) {
+          return  $this->repository->findByUserId($userId);
+        });
+    }
 
 }

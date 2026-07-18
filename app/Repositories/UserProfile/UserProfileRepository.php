@@ -19,7 +19,16 @@ class UserProfileRepository extends BaseRepository implements UserProfileReposit
 
     public function findById($id)
     {
-        return $this->model->withTrashed()->find($id);
+        return $this->model
+            ->newQuery()
+            ->find($id);
+    }
+    public function findByUserId($userId)
+    {
+        return $this->model
+            ->newQuery()
+            ->where('user_id', $userId)
+            ->first();
     }
 
 

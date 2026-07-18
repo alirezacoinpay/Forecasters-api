@@ -7,4 +7,5 @@ use App\Repositories\BaseRepositoryInterface;
 interface UserProfileRepositoryInterface extends BaseRepositoryInterface
 {
 
+    public function findByUserId($userId);
 }

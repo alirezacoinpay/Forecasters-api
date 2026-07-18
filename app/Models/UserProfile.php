@@ -10,9 +10,12 @@ class UserProfile extends BaseModel
 {
     public const string TAG = "userprofile";
 
+    public const string FILE_PATH = "user_profiles";
+
     protected $fillable = [
         'avatar',
         'name',
+        'user_id',
     ];
     public function user(): BelongsTo
     {
