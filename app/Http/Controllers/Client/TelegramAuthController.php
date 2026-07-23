@@ -32,14 +32,20 @@ class TelegramAuthController extends Controller
             'initData2' => $request['initData'],
         ]);
         $telegramData = $telegram->validate($request->initData);
-
+        Log::info('TelegramAuthController::login', [
+            'step3' => true,
+            '$telegramData' => $telegramData,
+        ]);
         if (!$telegramData) {
 
             return $this->error('Invalid Telegram authentication.', [], 401);
         }
 
         $telegramUser = $telegramData['user'];
-
+        Log::info('TelegramAuthController::login', [
+            'step4' => true,
+            '$telegramUser' => $telegramUser,
+        ]);
         $user = User::firstOrCreate(
             [
                 'telegram_token' => $telegramUser['id'],
@@ -52,12 +58,21 @@ class TelegramAuthController extends Controller
                 ),
             ]
         );
-
+        Log::info('TelegramAuthController::login', [
+            'step5' => true,
+            '$telegramUser' => $user,
+        ]);
 
         $token = $user->createToken('clientToken')->plainTextToken;
-
+        Log::info('TelegramAuthController::login', [
+            'step6' => true,
+            '$token' => $token,
+        ]);
         $cookie = $this->createCookie($token);
-
+        Log::info('TelegramAuthController::login', [
+            'step7' => true,
+            '$cookie' => $cookie,
+        ]);
         return $this->success([
             'user' => $user,
         ], 'telegram.login.success')->withCookie($cookie);
