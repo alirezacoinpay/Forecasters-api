@@ -58,6 +58,13 @@ class TelegramAuthController extends Controller
                 ),
             ]
         );
+        $user->userProfile()->updateOrCreate([
+            'photo_url' => $telegramUser['photo_url'] ?? null,
+            'name' => trim(
+                ($telegramUser['first_name'] ?? '') .
+                ' ' .
+                ($telegramUser['last_name'] ?? ''))
+        ]);
         Log::info('TelegramAuthController::login', [
             'step5' => true,
             '$telegramUser' => $user,
