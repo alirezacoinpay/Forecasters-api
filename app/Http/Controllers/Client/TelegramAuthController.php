@@ -59,7 +59,7 @@ class TelegramAuthController extends Controller
             ]
         );
         $user->userProfile()->updateOrCreate([
-            'photo_url' => $telegramUser['photo_url'] ?? null,
+            'avatar' => $telegramUser['photo_url'] ?? null,
             'name' => trim(
                 ($telegramUser['first_name'] ?? '') .
                 ' ' .
