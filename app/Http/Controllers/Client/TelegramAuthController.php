@@ -1,18 +1,12 @@
 <?php
 namespace App\Http\Controllers\Client;
 
-use App\Enums\SmsTemplate;
-use App\Facades\Sms;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\Auth\LoginRequest;
-use App\Http\Requests\Client\Auth\SendOtpRequest;
-use App\Http\Requests\Client\Auth\VerifyOtpRequest;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Telegram\TelegramAuthService;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Cookie;
 
