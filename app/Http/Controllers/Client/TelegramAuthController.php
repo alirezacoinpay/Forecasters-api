@@ -13,6 +13,7 @@ use App\Services\Telegram\TelegramAuthService;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Cookie;
 
 
@@ -24,10 +25,18 @@ class TelegramAuthController extends Controller
 
     public function login(Request $request, TelegramAuthService $telegram): JsonResponse
     {
+
+        Log::info('TelegramAuthController::login', [
+            'step1' => true,
+        ]);
         $request->validate([
             'initData' => ['required', 'string'],
         ]);
-
+        Log::info('TelegramAuthController::login', [
+            'step2' => true,
+            'initData' => $request->initData,
+            'initData2' => $request['initData'],
+        ]);
         $telegramData = $telegram->validate($request->initData);
 
         if (!$telegramData) {
