@@ -18,6 +18,7 @@ class User extends Authenticatable
         'username',
         'mobile',
         'mobile_verified_at',
+        'telegram_token',
     ];
     public function userPredictions(): HasMany
     {

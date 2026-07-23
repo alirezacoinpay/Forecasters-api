@@ -8,6 +8,7 @@ use App\Http\Controllers\Client\{
     CommentLikeController,
     UserPredictionController,
     PredictionLikeController,
+    TelegramAuthController,
     AuthController,
     UserController,
     ActivityController,
@@ -23,6 +24,9 @@ Route::controller(AuthController::class)->group( function () {
     Route::post('/login', 'login');
     Route::post('/send-otp', 'sendOtp');
     Route::post('/verify-otp', 'verifyOtp');
+});
+Route::controller(TelegramAuthController::class)->group( function () {
+    Route::post('/auth/telegram', 'login');
 });
 
 Route::middleware(['auth:sanctum', 'client'])->group( function () {
