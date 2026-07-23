@@ -22,7 +22,7 @@ trait HasFile
     public function avatar(): Attribute
     {
         return Attribute::make(
-            get: fn (string | null $value) => $value ? config('app.filesUrl').self::FILE_PATH.'/'.$value : null,
+            get: fn (string | null $value) => $value ? $this->makeAvatarUrl($value) : null,
         );
     }
 
@@ -31,5 +31,18 @@ trait HasFile
         return Attribute::make(
             get: fn (string | null $value) => $value ? config('app.filesUrl').self::FILE_PATH.'/'.$value : null,
         );
+    }
+
+    private function makeAvatarUrl($value): string
+    {
+        if ($this->isTelegramAvatar($value)){
+            return $value;
+        }
+       return config('app.filesUrl').self::FILE_PATH.'/'.$value;
+    }
+
+    private function isTelegramAvatar($value)
+    {
+        return str_contains($value, 'https://t.me');
     }
 }
