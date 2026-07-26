@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Telegram\TelegramAuthService;
 use Illuminate\Http\Request;
@@ -83,7 +84,7 @@ class TelegramAuthController extends Controller
 
         $filename = Str::uuid().'.svg';
 
-        $path = "telegram-avatars/{$filename}";
+        $path = UserProfile::FILE_PATH."/{$filename}";
 
         Storage::disk('public')->put($path, $response->body());
         return $filename;
