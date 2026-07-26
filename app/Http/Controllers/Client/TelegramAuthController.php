@@ -22,33 +22,19 @@ class TelegramAuthController extends Controller
 
     public function login(Request $request, TelegramAuthService $telegram): JsonResponse
     {
-
-        Log::info('TelegramAuthController::login', [
-            'step1' => true,
-        ]);
         $request->validate([
             'initData' => ['required', 'string'],
         ]);
-        Log::info('TelegramAuthController::login', [
-            'step2' => true,
-            'initData' => $request->initData,
-            'initData2' => $request['initData'],
-        ]);
+
         $telegramData = $telegram->validate($request->initData);
-        Log::info('TelegramAuthController::login', [
-            'step3' => true,
-            '$telegramData' => $telegramData,
-        ]);
+
         if (!$telegramData) {
 
             return $this->error('Invalid Telegram authentication.', [], 401);
         }
 
         $telegramUser = $telegramData['user'];
-        Log::info('TelegramAuthController::login', [
-            'step4' => true,
-            '$telegramUser' => $telegramUser,
-        ]);
+
         $user = User::firstOrCreate(
             [
                 'telegram_token' => $telegramUser['id'],
@@ -62,10 +48,7 @@ class TelegramAuthController extends Controller
             ]
         );
         $avatar = $this->getTelegramUserAvatar($telegramUser['photo_url']);
-        Log::info('TelegramAuthController::login', [
-            'step5' => true,
-            'avatar' => $avatar,
-        ]);
+
         $user->userProfile()->updateOrCreate(['user_id' => $user->id], [
             'avatar' => $avatar,
             'name' => trim(
@@ -73,21 +56,12 @@ class TelegramAuthController extends Controller
                 ' ' .
                 ($telegramUser['last_name'] ?? ''))
         ]);
-        Log::info('TelegramAuthController::login', [
-            'step5' => true,
-            '$telegramUser' => $user,
-        ]);
+
 
         $token = $user->createToken('clientToken')->plainTextToken;
-        Log::info('TelegramAuthController::login', [
-            'step6' => true,
-            '$token' => $token,
-        ]);
+
         $cookie = $this->createCookie($token);
-        Log::info('TelegramAuthController::login', [
-            'step7' => true,
-            '$cookie' => $cookie,
-        ]);
+
         return $this->success([
             'user' => $user,
         ], 'telegram.login.success')->withCookie($cookie);
@@ -95,37 +69,24 @@ class TelegramAuthController extends Controller
 
     public function getTelegramUserAvatar(? string $url): ?string
     {
-        Log::info('TelegramAuthController::getTelegramUserAvatar', [
-            'url' => $url,
-        ]);
         $response = Http::timeout(20)
             ->accept('image/svg+xml')
             ->get($url);
         if (! $response->successful()) {
-            return null;
+            return $url;
         }
 
         $contentType = $response->header('Content-Type');
-        Log::info('TelegramAuthController::getTelegramUserAvatar', [
-            '$contentType' => $contentType,
-        ]);
         if (! str_contains($contentType, 'image/')) {
-            return null;
+            return $url;
         }
 
         $filename = Str::uuid().'.svg';
-        Log::info('TelegramAuthController::getTelegramUserAvatar', [
-            '$filename' => $filename,
-        ]);
+
         $path = "telegram-avatars/{$filename}";
-        Log::info('TelegramAuthController::getTelegramUserAvatar', [
-            '$path' => $path,
-        ]);
-        $result = Storage::disk('public')->put($path, $response->body());
-        Log::info('TelegramAuthController::getTelegramUserAvatar', [
-            '$result' => $result,
-        ]);
-        return $path;
+
+        Storage::disk('public')->put($path, $response->body());
+        return $filename;
     }
     private function createCookie(string $token): Cookie
     {
