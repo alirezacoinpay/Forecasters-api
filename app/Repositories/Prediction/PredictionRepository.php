@@ -50,7 +50,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         return $this->model
             ->newQuery()
-            ->with(['userPrediction' => function ($query) use ($userId) {
+            ->with(['user.userProfile', 'userPrediction' => function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             }])
             ->withCount(['comments', 'predictionLikes'])
