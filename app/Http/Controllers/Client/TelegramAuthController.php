@@ -71,26 +71,48 @@ class TelegramAuthController extends Controller
         ], 'telegram.login.success')->withCookie($cookie);
     }
 
-    public function getTelegramUserAvatar(? string $url): ?string
+    public function getTelegramUserAvatar(?string $url): ?string
     {
-        $response = Http::timeout(20)
-            ->accept('image/svg+xml')
-            ->get($url);
-        if (! $response->successful()) {
-            return $url;
+        if (blank($url)) {
+            return null;
         }
 
-        $contentType = $response->header('Content-Type');
-        if (! str_contains($contentType, 'image/')) {
+        try {
+            $response = Http::timeout(20)
+                ->accept('image/*')
+                ->get($url);
+
+            if (! $response->successful()) {
+                return $url;
+            }
+
+            $contentType = $response->header('Content-Type');
+
+            if (! str_starts_with($contentType, 'image/')) {
+                return $url;
+            }
+
+            $extension = match ($contentType) {
+                'image/svg+xml' => 'svg',
+                'image/png' => 'png',
+                'image/jpeg' => 'jpg',
+                'image/webp' => 'webp',
+                default => 'bin',
+            };
+
+            $filename = Str::uuid().'.'.$extension;
+
+            Storage::disk('public')->put(
+                UserProfile::FILE_PATH.'/'.$filename,
+                $response->body()
+            );
+
+            return $filename;
+        } catch (\Throwable $e) {
+            report($e);
+
             return $url;
         }
-
-        $filename = Str::uuid().'.svg';
-
-        $path = UserProfile::FILE_PATH."/{$filename}";
-
-        Storage::disk('public')->put($path, $response->body());
-        return $filename;
     }
     private function createCookie(string $token): Cookie
     {
