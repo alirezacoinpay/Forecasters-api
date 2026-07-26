@@ -49,7 +49,7 @@ class TelegramAuthController extends Controller
         );
         $avatar = $this->getTelegramUserAvatar($telegramUser['photo_url']);
 
-        $user->userProfile()->updateOrCreate(['user_id' => $user->id], [
+        $user->userProfile()->updateOrCreate([
             'avatar' => $avatar,
             'name' => trim(
                 ($telegramUser['first_name'] ?? '') .
