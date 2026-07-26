@@ -101,9 +101,6 @@ class TelegramAuthController extends Controller
         $response = Http::timeout(20)
             ->accept('image/svg+xml')
             ->get($url);
-        Log::info('TelegramAuthController::getTelegramUserAvatar', [
-            'response' => $response,
-        ]);
         if (! $response->successful()) {
             return null;
         }
@@ -113,13 +110,21 @@ class TelegramAuthController extends Controller
         if (! str_contains($contentType, 'image/svg')) {
             return null;
         }
-
+        Log::info('TelegramAuthController::getTelegramUserAvatar', [
+            '$contentType' => $contentType,
+        ]);
         $filename = Str::uuid().'.svg';
-
+        Log::info('TelegramAuthController::getTelegramUserAvatar', [
+            '$filename' => $filename,
+        ]);
         $path = "telegram-avatars/{$filename}";
-
-        Storage::disk('public')->put($path, $response->body());
-
+        Log::info('TelegramAuthController::getTelegramUserAvatar', [
+            '$path' => $path,
+        ]);
+        $result = Storage::disk('public')->put($path, $response->body());
+        Log::info('TelegramAuthController::getTelegramUserAvatar', [
+            '$result' => $result,
+        ]);
         return $path;
     }
     private function createCookie(string $token): Cookie
