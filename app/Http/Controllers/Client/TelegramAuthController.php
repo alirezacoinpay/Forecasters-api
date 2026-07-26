@@ -7,7 +7,10 @@ use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Telegram\TelegramAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Cookie;
 
 
@@ -58,8 +61,9 @@ class TelegramAuthController extends Controller
                 ),
             ]
         );
+        $avatar = $this->getTelegramUserAvatar($telegramUser['photo_url']);
         $user->userProfile()->updateOrCreate([
-            'avatar' => $telegramUser['photo_url'] ?? null,
+            'avatar' => $avatar,
             'name' => trim(
                 ($telegramUser['first_name'] ?? '') .
                 ' ' .
@@ -83,6 +87,31 @@ class TelegramAuthController extends Controller
         return $this->success([
             'user' => $user,
         ], 'telegram.login.success')->withCookie($cookie);
+    }
+
+    public function getTelegramUserAvatar(? string $url): ?string
+    {
+        $response = Http::timeout(20)
+            ->accept('image/svg+xml')
+            ->get($url);
+
+        if (! $response->successful()) {
+            return null;
+        }
+
+        $contentType = $response->header('Content-Type');
+
+        if (! str_contains($contentType, 'image/svg')) {
+            return null;
+        }
+
+        $filename = Str::uuid().'.svg';
+
+        $path = "telegram-avatars/{$filename}";
+
+        Storage::disk('public')->put($path, $response->body());
+
+        return $path;
     }
     private function createCookie(string $token): Cookie
     {
