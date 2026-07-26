@@ -106,13 +106,13 @@ class TelegramAuthController extends Controller
         }
 
         $contentType = $response->header('Content-Type');
-
-        if (! str_contains($contentType, 'image/svg')) {
-            return null;
-        }
         Log::info('TelegramAuthController::getTelegramUserAvatar', [
             '$contentType' => $contentType,
         ]);
+        if (! str_contains($contentType, 'image/svg')) {
+            return null;
+        }
+
         $filename = Str::uuid().'.svg';
         Log::info('TelegramAuthController::getTelegramUserAvatar', [
             '$filename' => $filename,
