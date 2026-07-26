@@ -48,15 +48,18 @@ class TelegramAuthController extends Controller
                 ),
             ]
         );
-        $avatar = $this->getTelegramUserAvatar($telegramUser['photo_url']);
 
-        $user->userProfile()->updateOrCreate([
-            'avatar' => $avatar,
-            'name' => trim(
-                ($telegramUser['first_name'] ?? '') .
-                ' ' .
-                ($telegramUser['last_name'] ?? ''))
-        ]);
+        $profile = $user->userProfile()->firstOrCreate([]);
+
+        if (! $profile->avatar) {
+            $profile->avatar = $this->getTelegramUserAvatar($telegramUser['photo_url']);
+        }
+
+        $profile->name = trim(
+            ($telegramUser['first_name'] ?? '') . ' ' . ($telegramUser['last_name'] ?? '')
+        );
+
+        $profile->save();
 
 
         $token = $user->createToken('clientToken')->plainTextToken;
