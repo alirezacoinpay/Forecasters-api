@@ -62,7 +62,11 @@ class TelegramAuthController extends Controller
             ]
         );
         $avatar = $this->getTelegramUserAvatar($telegramUser['photo_url']);
-        $user->userProfile()->updateOrCreate([
+        Log::info('TelegramAuthController::login', [
+            'step5' => true,
+            'avatar' => $avatar,
+        ]);
+        $user->userProfile()->updateOrCreate(['user_id' => $user->id], [
             'avatar' => $avatar,
             'name' => trim(
                 ($telegramUser['first_name'] ?? '') .
@@ -91,10 +95,15 @@ class TelegramAuthController extends Controller
 
     public function getTelegramUserAvatar(? string $url): ?string
     {
+        Log::info('TelegramAuthController::getTelegramUserAvatar', [
+            'url' => $url,
+        ]);
         $response = Http::timeout(20)
             ->accept('image/svg+xml')
             ->get($url);
-
+        Log::info('TelegramAuthController::getTelegramUserAvatar', [
+            'response' => $response,
+        ]);
         if (! $response->successful()) {
             return null;
         }
