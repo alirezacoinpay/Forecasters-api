@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Client\Feed;
 
+use App\Models\Prediction;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Traits\HasIndexRules;
@@ -21,6 +22,7 @@ class FeedsRequest extends FormRequest
         return $this->mergeRules([
             'topic_id' => ['nullable', 'integer', Rule::exists(Topic::class, 'id')],
             'tag_id' => ['nullable', 'integer', Rule::exists(Tag::class, 'id')],
+            'prediction_id' => ['nullable', 'integer', Rule::exists(Prediction::class, 'id')],
             'search' => ['nullable', 'string', 'max:255'],
         ]);
     }
