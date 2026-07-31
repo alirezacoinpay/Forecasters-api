@@ -143,6 +143,14 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
                 $query->where('username', '%' . $params['search'] . '%');
             });
         }
+        if (isset($params['prediction_id'])) {
+            $predictionId = (int) $params['prediction_id'];
+
+            $query->orderByRaw(
+                "CASE WHEN id = ? THEN 0 ELSE 1 END",
+                [$predictionId]
+            );
+        }
 
         $query->orderBy('id', $params['sort'] ?? 'desc');
 
