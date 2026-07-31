@@ -8,6 +8,7 @@ use App\Http\Resources\Client\PredictionResource;
 use App\Repositories\Prediction\PredictionRepositoryInterface;
 use App\Repositories\UserSearchHistory\UserSearchHistoryRepositoryInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class FeedController extends Controller
 {
@@ -22,7 +23,11 @@ class FeedController extends Controller
 
     public function feedPagePredictions(FeedsRequest $request): JsonResponse
     {
+
         $validated = $request->validated();
+        Log::info('FeedController:feedPagePredictions', [
+            'validated' => $validated,
+        ]);
 
         $predictions = $this->repository->userFeedPredictions($this->userId, $validated);
 
