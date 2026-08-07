@@ -16,6 +16,7 @@ class OpenAIService
             ->make();
     }
 
+
     public function GenerateGeneralForecasts(?string $prompt = null): array
     {
         $prompt = $prompt ?? config('ai.prompts.general_forecasts');

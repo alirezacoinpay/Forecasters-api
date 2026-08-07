@@ -1,63 +1,158 @@
 <?php
 
 return [
-    'prompt' => [
-        'general_forecasts' => '۵ سوال پیش‌بینی درباره قیمت طلا در سال ۲۰۲۵ تولید کن',
-    ],
-    'openai_instructions' => [
-        'general' => 'You are a Forecasting Prediction Generator Assistant.
-            Your purpose is to create predictions in Persian (Farsi) that are about future events that have not happened yet, and which can later be resolved objectively.
-            When generating predictions:
-            Language: all output must be in Persian (Farsi).
-            Nature: Each prediction should describe a predictive event (e.g., politics, sports, economics, technology, etc.).
-            No correct answers — these are forecasts, not knowledge predictions.
-            Options: Provide a variable number of answer options (minimum 2, maximum 10). Each option should represent a possible outcome.
-            Description:
-            Must clearly describe the prediction, its context, and how it will be resolved.
-            Must remove any ambiguity about what exactly is being predicted.
-            Must include the resolution rule (how we will determine which option was correct when the event occurs).
-            Example: "در صورت برگزاری بازی فوتبال تیم الف و ب در تاریخ ۲۴ مهر، اگر تیم الف برنده شود طبق نتایج رسمی فیفا گزینه بله صحیح محسوب می‌شود. در صورت لغو یا تغییر تاریخ، پیش‌بینی باطل می‌شود."
-            Metadata:
-            category (e.g. سیاست، اقتصاد، ورزش، فناوری، جامعه، محیط‌زیست)
-            topic — one short label summarizing the main subject (e.g. “انتخابات روسیه ۲۰۲۵”)
-            tags — an array of keywords (e.g. ["روسیه", "جنگ", "تحریم"])
-            You may also include any other useful metadata that helps with search or classification.
-            Output format:
-            Respond only in valid JSON — no text outside the JSON.
-            Use the following schema exactly.',
-    ],
-    'openai_schema' => [
-        "name" => "forecast_prediction",
-        "schema" => [
-            "type" => "object",
-            "properties" => [
-                "predictions" => [
-                    "type" => "array",
-                    "items" => [
-                        "type" => "object",
-                        "properties" => [
-                            "id"          => ["type" => "string"],
-                            "language"    => ["type" => "string", "enum" => ["fa"]],
-                            "category"    => ["type" => "string"],
-                            "topic"       => ["type" => "string"],
-                            "tags"        => ["type" => "array", "items" => ["type" => "string"]],
-                            "difficulty"  => ["type" => "string", "enum" => ["easy", "medium", "hard"]],
-                            "prediction"    => ["type" => "string"],
-                            "options"     => ["type" => "array", "items" => ["type" => "string"]],
-                            "description" => ["type" => "string"],
-                            "created_at"  => ["type" => "string", "format" => "date-time"]
-                        ],
-                        "required" => [
-                            "id","language","category","topic","tags",
-                            "difficulty","prediction","options","description","created_at"
-                        ],
-                        "additionalProperties" => false
-                    ]
-                ]
-            ],
-            "required" => ["predictions"],
-            "additionalProperties" => false
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default AI Provider Names
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify which of the AI providers below should be the
+    | default for AI operations when no explicit provider is provided
+    | for the operation. This should be any provider defined below.
+    |
+    */
+
+    'default' => 'local',
+    'default_for_images' => 'gemini',
+    'default_for_audio' => 'openai',
+    'default_for_transcription' => 'openai',
+    'default_for_embeddings' => 'openai',
+    'default_for_reranking' => 'cohere',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Caching
+    |--------------------------------------------------------------------------
+    |
+    | Below you may configure caching strategies for AI related operations
+    | such as embedding generation. You are free to adjust these values
+    | based on your application's available caching stores and needs.
+    |
+    */
+
+    'caching' => [
+        'embeddings' => [
+            'cache' => false,
+            'store' => env('CACHE_STORE', 'database'),
         ],
-        "strict" => true
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | AI Providers
+    |--------------------------------------------------------------------------
+    |
+    | Below are each of your AI providers defined for this application. Each
+    | represents an AI provider and API key combination which can be used
+    | to perform tasks like text, image, and audio creation via agents.
+    |
+    */
+
+    'providers' => [
+        'anthropic' => [
+            'driver' => 'anthropic',
+            'key' => env('ANTHROPIC_API_KEY'),
+            'url' => env('ANTHROPIC_URL', 'https://api.anthropic.com/v1'),
+        ],
+
+        'azure' => [
+            'driver' => 'azure',
+            'key' => env('AZURE_OPENAI_API_KEY'),
+            'url' => env('AZURE_OPENAI_URL'),
+            'api_version' => env('AZURE_OPENAI_API_VERSION', '2025-04-01-preview'),
+            'deployment' => env('AZURE_OPENAI_DEPLOYMENT', 'gpt-4o'),
+            'embedding_deployment' => env('AZURE_OPENAI_EMBEDDING_DEPLOYMENT', 'text-embedding-3-small'),
+            'image_deployment' => env('AZURE_OPENAI_IMAGE_DEPLOYMENT', 'gpt-image-1'),
+        ],
+
+        'bedrock' => [
+            'driver' => 'bedrock',
+            'region' => env('AWS_BEDROCK_REGION', 'us-east-1'),
+            'key' => env('AWS_BEARER_TOKEN_BEDROCK'),
+            'access_key_id' => env('AWS_ACCESS_KEY_ID'),
+            'secret_access_key' => env('AWS_SECRET_ACCESS_KEY'),
+            'session_token' => env('AWS_SESSION_TOKEN'),
+            'use_default_credential_provider' => env('AWS_USE_DEFAULT_CREDENTIALS', true),
+        ],
+
+        'cohere' => [
+            'driver' => 'cohere',
+            'key' => env('COHERE_API_KEY'),
+        ],
+
+        'deepseek' => [
+            'driver' => 'deepseek',
+            'key' => env('DEEPSEEK_API_KEY'),
+        ],
+
+        'eleven' => [
+            'driver' => 'eleven',
+            'key' => env('ELEVENLABS_API_KEY'),
+        ],
+
+        'gemini' => [
+            'driver' => 'gemini',
+            'key' => env('GEMINI_API_KEY'),
+            'url' => env('GEMINI_URL', 'https://generativelanguage.googleapis.com/v1beta/'),
+        ],
+
+        'groq' => [
+            'driver' => 'groq',
+            'key' => env('GROQ_API_KEY'),
+        ],
+
+        'jina' => [
+            'driver' => 'jina',
+            'key' => env('JINA_API_KEY'),
+        ],
+
+        'mistral' => [
+            'driver' => 'mistral',
+            'key' => env('MISTRAL_API_KEY'),
+        ],
+
+        'ollama' => [
+            'driver' => 'ollama',
+            'key' => env('OLLAMA_API_KEY', ''),
+            'url' => env('OLLAMA_URL', 'http://localhost:11434'),
+        ],
+
+        'openai' => [
+            'driver' => 'openai',
+            'key' => env('OPENAI_API_KEY'),
+            'url' => env('OPENAI_URL', 'https://api.openai.com/v1'),
+        ],
+
+        'openrouter' => [
+            'driver' => 'openrouter',
+            'key' => env('OPENROUTER_API_KEY'),
+        ],
+
+        'voyageai' => [
+            'driver' => 'voyageai',
+            'key' => env('VOYAGEAI_API_KEY'),
+        ],
+
+        'xai' => [
+            'driver' => 'xai',
+            'key' => env('XAI_API_KEY'),
+        ],
+
+        'local' => [
+            'driver' => 'openai-compatible',
+            'url' => env('LOCAL_AI_URL'),
+            'key' => env('LOCAL_AI_API_KEY'),
+            'models' => [
+                'text' => [
+                    'default' => env('LOCAL_AI_MODEL'),
+                ],
+            ],
+            'options' => [
+                'timeout' => 300,
+            ],
+        ],
+
+    ],
+
 ];
