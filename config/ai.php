@@ -148,8 +148,9 @@ return [
                     'default' => env('LOCAL_AI_MODEL'),
                 ],
             ],
-            'options' => [
-                'timeout' => 300,
+            'request_options' => [
+                'timeout' => 3000,
+                'connect_timeout' => 3000,
             ],
         ],
 

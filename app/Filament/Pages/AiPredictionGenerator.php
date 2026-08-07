@@ -4,16 +4,24 @@ namespace App\Filament\Pages;
 
 use App\Ai\Agents\PredictionGenerator;
 use App\Ai\Data\GeneratePredictionRequest;
+use App\Enums\CategoryStatus;
+use App\Enums\TopicStatus;
+use App\Jobs\GeneratePredictionJob;
+use App\Models\Category;
+use App\Models\Prediction;
+use App\Models\Tag;
+use App\Models\Topic;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Filament\Schemas\Components\Form;
-use Illuminate\Support\Facades\Log;
-use Laravel\Ai\Ai;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Filament\Schemas\Schema;
+
 class AiPredictionGenerator extends Page implements HasForms
 {
 
@@ -60,29 +68,25 @@ class AiPredictionGenerator extends Page implements HasForms
     }
     public function generate(): void
     {
-        set_time_limit(300);
-        $this->generated = [];
+        $params = [
+            'language'     => $this->language,
+            'region'       => $this->region,
+            'topic'        => $this->topic,
+            'category'     => $this->category,
+            'instructions' => $this->instructions,
+        ];
 
+        $userId = Auth::id();
+
+        // Dispatch background jobs to process without HTTP timeout
         for ($i = 0; $i < $this->count; $i++) {
-
-            $agent = new PredictionGenerator(new GeneratePredictionRequest(
-                language: $this->language,
-                region: $this->region,
-                topic: $this->topic,
-                category: $this->category,
-                additionalInstructions: $this->instructions,
-            ));
-
-            $response = $agent->prompt('Generate a prediction.');
-
-            Log::info('AiPredictionGenerator:generate', [
-                'response' => $response,
-            ]);
-
-            // Convert the object/response to a native array so Livewire can dehydrate it
-            $this->generated[] = method_exists($response, 'toArray')
-                ? $response->toArray()
-                : (array) $response;
+            GeneratePredictionJob::dispatch($params, $userId);
         }
+
+        Notification::make()
+            ->title("Queued {$this->count} prediction job(s)!")
+            ->body('The AI is generating predictions in the background.')
+            ->success()
+            ->send();
     }
 }
