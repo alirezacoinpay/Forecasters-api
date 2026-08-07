@@ -3,6 +3,7 @@
 namespace App\Ai\Agents;
 
 use App\Ai\Data\GeneratePredictionRequest;
+use App\Models\Prediction;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
 use Laravel\Ai\Contracts\HasStructuredOutput;
@@ -22,37 +23,41 @@ class PredictionGenerator implements Agent, Conversational, HasStructuredOutput,
     {
         return <<<'PROMPT'
 You are an expert prediction writer for the Forecasters platform.
+Your sole task is to generate ONE precise, verifiable prediction package.
 
-Your only job is to generate ONE high-quality prediction.
+### CRITICAL SCRIPT & LANGUAGE RULES
+1. **STRICT SINGLE LANGUAGE:** Every single field (`title`, `options`, `category`, `topic`, `tags`) MUST be written strictly in the user's requested target language.
+2. **NO LATIN/ENGLISH LEAKS IN PERSIAN:** If the target language is "Persian" (Farsi):
+   - Output 100% pure Persian using Persian script (فارسی).
+   - ABSOLUTELY NO Latin/English characters, mixed-script terms, or transliterations (e.g., NEVER write "Scenario Conflict", "Involvement", or "Filsanimal").
+   - Translate all technical or political terms into natural, standard formal Persian news/forecasting terminology.
 
-CRITICAL LANGUAGE RULE:
-- You MUST write the title, options, category, topic, and tags ENTIRELY in the target language requested by the user.
-- If the language requested is "Persian" (or Farsi), output all strings using Persian script/alphabet.
+### PREDICTION QUALITY RULES
+- **Verifiable Outcome:** The event must have a clear, objective, and publicly verifiable resolution.
+- **No Ambiguity:** Avoid subjective opinions, vague timeframes, or controversial/offensive content.
+- **Natural Tone:** Use realistic, engaging, and professional journalism-style phrasing.
 
-Rules:
-- Generate exactly one prediction.
-- The prediction must describe a future event.
-- It must have a clear and objectively verifiable outcome.
-- Avoid subjective or opinion-based questions.
-- Avoid duplicate ideas.
-- Avoid vague wording.
-- Avoid controversial or offensive content.
-- Use natural language.
-- Make the prediction interesting to a broad audience.
+### FIELD-SPECIFIC GUIDELINES
+- **Title:**
+  - A single, fully self-contained prediction question (Max 500 characters).
+  - Must include all relevant context, exact entities, and explicit timeframes directly inside the question.
+  - Do NOT generate or expect a separate text/description field.
+- **Options:**
+  - Provide between 2 and 6 options.
+  - Options MUST be mutually exclusive and collectively exhaustive (covering all possible outcomes).
+  - Phrased cleanly and grammatically in the target language.
 
-Prediction Title Rules:
-- The title MUST contain the full prediction question and essential context.
-- Maximum 500 characters.
-- Clear, concise, and complete.
-- Include a timeframe and specific conditions directly within the title.
-- Do NOT generate a separate description or text section.
+### EXAMPLE (PERSIAN TARGET)
+If Target Language is Persian:
+- **Title:** "آیا تیم ملی فوتبال ایران در جام ملت‌های آسیا ۲۰۲۷ به مرحله نیمه‌نهایی صعود خواهد کرد؟"
+- **Options:**
+  1. "بله، تیم ملی ایران به مرحله نیمه‌نهایی یا بالاتر صعود می‌کند."
+  2. "خیر، تیم ملی ایران قبل از مرحله نیمه‌نهایی حذف می‌شود."
+- **Category:** "ورزش"
+- **Topic:** "فوتبال"
+- **Tags:** ["ایران", "فوتبال", "جام ملت‌های آسیا", "تیم ملی"]
 
-Options Rules:
-- Between 2 and 6 options.
-- Options must be mutually exclusive.
-- Options must cover every possible outcome.
-
-Only generate the prediction itself.
+Generate ONLY the requested prediction payload.
 PROMPT;
     }
 
@@ -76,6 +81,16 @@ PROMPT;
             $prompt[] = "Category: {$this->request->category}";
         }
 
+        $recentTitles = Prediction::latest('id')
+            ->limit(15)
+            ->pluck('title')
+            ->filter()
+            ->toArray();
+
+        if (!empty($recentTitles)) {
+            $prompt[] = "DO NOT generate predictions similar to these recent ones:\n- " . implode("\n- ", $recentTitles);
+        }
+
         if ($this->request->additionalInstructions) {
             $prompt[] = "Additional Instructions: {$this->request->additionalInstructions}";
         }
@@ -88,6 +103,10 @@ PROMPT;
     public function tools(): iterable
     {
         return [];
+    }
+    public function temperature(): float
+    {
+        return 0.3; // Lower temperature ensures deterministic, grammatically solid language output
     }
 
     public function schema($schema): array

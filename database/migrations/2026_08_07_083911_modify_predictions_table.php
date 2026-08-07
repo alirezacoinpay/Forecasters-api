@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::table('predictions', function (Blueprint $table) {
             $table->string('title', 1024)->nullable()->change();
+            $table->string('language', 20)->nullable()->after('topic_id');
+            $table->string('region', 50)->nullable()->after('language');
+            $table->string('title_hash', 64)->nullable()->unique()->after('region');
         });
     }
 
@@ -23,6 +26,8 @@ return new class extends Migration
     {
         Schema::table('predictions', function (Blueprint $table) {
             $table->string('title')->nullable()->change();
+            $table->dropUnique(['title_hash']);
+            $table->dropColumn(['language', 'region', 'title_hash']);
         });
     }
 };

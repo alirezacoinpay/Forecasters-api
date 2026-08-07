@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'local',
+    'default' => 'openrouter',
     'default_for_images' => 'gemini',
     'default_for_audio' => 'openai',
     'default_for_transcription' => 'openai',
@@ -127,6 +127,15 @@ return [
         'openrouter' => [
             'driver' => 'openrouter',
             'key' => env('OPENROUTER_API_KEY'),
+            'models' => [
+                'text' => [
+                    'default' => env('OPENROUTER_AI_MODEL'),
+                ],
+            ],
+            'request_options' => [
+                'timeout' => 300,
+                'connect_timeout' => 300,
+            ],
         ],
 
         'voyageai' => [

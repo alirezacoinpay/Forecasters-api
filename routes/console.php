@@ -3,8 +3,9 @@
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use App\Console\Commands\GenerateAiPredictions;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
-Schedule::command('app:generate-general-forecasts')->everyMinute();
+Schedule::command(GenerateAiPredictions::class)->everyMinute();
