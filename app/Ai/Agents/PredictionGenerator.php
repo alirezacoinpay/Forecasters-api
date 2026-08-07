@@ -7,18 +7,17 @@ use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
 use Laravel\Ai\Contracts\HasStructuredOutput;
 use Laravel\Ai\Contracts\HasTools;
-use Laravel\Ai\Contracts\Tool;
-use Laravel\Ai\Messages\Message;
 use Laravel\Ai\Messages\UserMessage;
 use Laravel\Ai\Promptable;
-use Stringable;
 
 class PredictionGenerator implements Agent, Conversational, HasStructuredOutput, HasTools
 {
     use Promptable;
+
     public function __construct(
         protected GeneratePredictionRequest $request
     ) {}
+
     public function instructions(): string
     {
         return <<<'PROMPT'
@@ -27,7 +26,6 @@ You are an expert prediction writer for the Forecasters platform.
 Your only job is to generate ONE high-quality prediction.
 
 Rules:
-
 - Generate exactly one prediction.
 - The prediction must describe a future event.
 - It must have a clear and objectively verifiable outcome.
@@ -39,24 +37,20 @@ Rules:
 - Make the prediction interesting to a broad audience.
 
 Prediction title rules:
-
 - Maximum 120 characters.
 - Clear and concise.
 - Include a timeframe when necessary.
 
 Description rules:
-
 - Explain the prediction briefly.
 - One or two short paragraphs.
 - Do not repeat the title.
 
 Options:
-
 - Between 2 and 6 options.
 - Options must be mutually exclusive.
 - Options must cover every possible outcome.
 
-Do not invent categories or tags.
 Only generate the prediction itself.
 PROMPT;
     }
@@ -85,11 +79,8 @@ PROMPT;
             $prompt[] = $this->request->additionalInstructions;
         }
 
-
         return [
-            new UserMessage(
-                implode("\n", $prompt)
-            )
+            new UserMessage(implode("\n", $prompt))
         ];
     }
 
@@ -103,18 +94,17 @@ PROMPT;
         return [
             'title' => $schema
                 ->string()
+                ->description('The concise title of the prediction.')
+                ->required(),
+
+            'description' => $schema
+                ->string()
+                ->description('Brief explanation of the prediction.')
                 ->required(),
 
             'options' => $schema
-                ->array(
-                )
+                ->array($schema->string()) // Specify array item type
                 ->min(2)
-                ->max(6)
-                ->required(),
-
-            'tags' => $schema
-                ->array(
-                )
                 ->max(6)
                 ->required(),
 
