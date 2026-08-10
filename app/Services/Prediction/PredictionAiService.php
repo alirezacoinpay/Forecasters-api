@@ -127,12 +127,12 @@ class PredictionAiService
         $rawTitle = trim($structured['title']);
 
         // 1. Language Script Guardrail (Rejects corrupted Latin tokens in Persian output)
-        if ($language === 'Persian' && preg_match('/[a-zA-Z]/', $rawTitle)) {
-            Log::warning('PredictionService: Persian title contained Latin characters. Retrying generation.', [
-                'title' => $rawTitle,
-            ]);
-            throw new Exception('Generated text contains language/script leaks. Requesting a retry.');
-        }
+//        if ($language === 'Persian' && preg_match('/[a-zA-Z]/', $rawTitle)) {
+//            Log::warning('PredictionService: Persian title contained Latin characters. Retrying generation.', [
+//                'title' => $rawTitle,
+//            ]);
+//            throw new Exception('Generated text contains language/script leaks. Requesting a retry.');
+//        }
 
         // 2. Duplicate Detection via SHA-256 Hash
         $normalizedTitle = mb_strtolower($rawTitle);
