@@ -132,9 +132,10 @@ return [
                     'default' => env('OPENROUTER_AI_MODEL'),
                 ],
             ],
+            // Ensure timeout is explicitly set as integer seconds:
             'request_options' => [
                 'timeout' => 300,
-                'connect_timeout' => 300,
+                'connect_timeout' => 30,
             ],
         ],
 

@@ -19,6 +19,11 @@ class PredictionGenerator implements Agent, Conversational, HasStructuredOutput,
         protected GeneratePredictionRequest $request
     ) {}
 
+    public function timeout(): int
+    {
+        return 300;
+    }
+
     public function instructions(): string
     {
         return <<<'PROMPT'
@@ -44,6 +49,7 @@ Your sole task is to generate ONE precise, verifiable prediction package.
   - Do NOT generate or expect a separate text/description field.
 - **Options:**
   - Provide between 2 and 6 options.
+  - **STRICT LENGTH LIMIT:** Each option MUST be concise and under 44 characters long.
   - Options MUST be mutually exclusive and collectively exhaustive (covering all possible outcomes).
   - Phrased cleanly and grammatically in the target language.
 
@@ -118,7 +124,9 @@ PROMPT;
                 ->required(),
 
             'options' => $schema
-                ->array($schema->string())
+                ->array(
+                    $schema->string()->max(44)
+                )
                 ->description('List of options in the requested language.')
                 ->min(2)
                 ->max(6)
