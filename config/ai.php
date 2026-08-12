@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'openrouter',
+    'default' => env('AI_AGENT_PROVIDER', 'openrouter'),
     'default_for_images' => 'gemini',
     'default_for_audio' => 'openai',
     'default_for_transcription' => 'openai',
@@ -149,6 +149,16 @@ return [
             'key' => env('XAI_API_KEY'),
         ],
 
+        'bynara' => [
+            'driver' => 'openai',
+            'key' => env('BYNARA_API_KEY'),
+            'models' => [
+                'text' => [
+                    'default' => env('BYNARA_AI_MODEL'),
+                ],
+            ],
+            'url' => env('BYNARA_URL'),
+        ],
         'local' => [
             'driver' => 'openai-compatible',
             'url' => env('LOCAL_AI_URL'),
