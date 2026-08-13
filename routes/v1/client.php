@@ -40,6 +40,7 @@ Route::middleware(['auth:sanctum', 'client'])->group( function () {
         Route::get('/predictions/{id}', 'show');
         Route::get('/predictions/{id}/comments', 'comments');
         Route::post('/predictions', 'store');
+        Route::get('/my-predictions', 'myPredictions');
     });
 
     Route::controller(TopicController::class)->group( function () {
