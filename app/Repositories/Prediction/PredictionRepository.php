@@ -206,6 +206,9 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
                 $query->withCount('userPredictions');
             }])
             ->withCount(['comments', 'userPredictions', 'predictionForwards'])
+            ->with(['userPrediction' => function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            }])
             ->whereHas('userPredictions', function ($query) use ($userId) {
                 $query->where('user_id', $userId);
             });
