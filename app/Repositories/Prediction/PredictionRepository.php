@@ -198,5 +198,42 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
         }
 
     }
+    public function allUserPredictions($userId = null, $params = [])
+    {
+        $query = $this->model
+            ->newQuery()
+            ->with(['tags', 'user', 'comments', 'predictionOptions' => function ($query) {
+                $query->withCount('userPredictions');
+            }])
+            ->withCount(['comments', 'userPredictions', 'predictionForwards'])
+            ->whereHas('userPredictions', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            });
+
+        //TODO
+        if (isset($params['search'])) {
+            $query->where('text', $params['search']);
+        }
+
+        if (isset($params['tag_id'])) {
+
+            $query->whereHas('tags' , function ($query) use ($params) {
+                $query->where('tags.id', $params['tag_id']);
+            });
+        }
+
+        if (isset($params['topic_id'])) {
+            $query->where('topic_id', $params['topic_id']);
+        }
+
+        $query->orderBy('id', $params['sort'] ?? 'desc');
+        if (!empty($params['paginate'])) {
+            return $query->paginate($params['paginate']);
+        }else{
+
+            return $query->get();
+        }
+
+    }
 
 }

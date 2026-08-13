@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\UserPredictions\AddUserPredictionRequest;
 use App\Http\Requests\Client\UserPredictions\AllUserPredictionsRequest;
 use App\Http\Requests\Client\UserPredictions\UpdateUserPredictionRequest;
+use App\Http\Resources\Client\PredictionResource;
 use App\Http\Resources\Client\UserPredictionResource;
 use App\Models\Comment;
 use App\Repositories\Comment\CommentRepositoryInterface;
@@ -17,11 +18,14 @@ use Illuminate\Support\Facades\Auth;
 
 class UserPredictionController extends Controller
 {
+    protected ?int $userId;
     public function __construct(
         protected UserPredictionRepositoryInterface $repository,
         protected CommentRepositoryInterface $commentRepository,
         protected PredictionRepositoryInterface $predictionRepository,
     ) {
+
+        $this->userId = auth()->user()?->getAuthIdentifier() ?? null;
     }
 
     public function show($id): JsonResponse
@@ -36,9 +40,9 @@ class UserPredictionController extends Controller
     public function index(AllUserPredictionsRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $userPredictions = $this->repository->all($validated);
+        $predictionsOfUsers = $this->predictionRepository->allUserPredictions($this->userId, $validated);
 
-        return $this->success(UserPredictionResource::collection($userPredictions));
+        return $this->success(PredictionResource::collection($predictionsOfUsers));
     }
 
     public function store(AddUserPredictionRequest $request): JsonResponse
