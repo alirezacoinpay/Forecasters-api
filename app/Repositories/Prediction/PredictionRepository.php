@@ -66,7 +66,7 @@ class PredictionRepository extends BaseRepository implements PredictionRepositor
     {
         return $this->commentModel
             ->newQuery()
-            ->with(['userLike'])
+            ->with(['userLike', 'user.userProfile'])
             ->withCount(['user', 'commentLikes'])
             ->where('prediction_id', $id)
             ->orderBy('created_at', 'desc')
