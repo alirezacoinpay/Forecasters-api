@@ -120,6 +120,9 @@ class PredictionAiService
 
         $structured = $response->structured ?? [];
 
+        Log::info('PredictionAiService:generateAndSave',[
+            'structured' => $structured ?? null,
+        ]);
         if (empty($structured) || empty($structured['title'])) {
             throw new Exception('Failed to generate valid structured AI response.');
         }
