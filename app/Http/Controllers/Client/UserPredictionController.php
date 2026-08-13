@@ -40,9 +40,9 @@ class UserPredictionController extends Controller
     public function index(AllUserPredictionsRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $predictionsOfUsers = $this->predictionRepository->allUserPredictions($this->userId, $validated);
+        $predictionsOfUser = $this->predictionRepository->allUserPredictions($this->userId, $validated);
 
-        return $this->success(PredictionResource::collection($predictionsOfUsers));
+        return $this->success(PredictionResource::collection($predictionsOfUser));
     }
 
     public function store(AddUserPredictionRequest $request): JsonResponse

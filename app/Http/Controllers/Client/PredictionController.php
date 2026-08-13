@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\Predictions\AddPredictionsRequest;
 use App\Http\Requests\Client\Predictions\AllPredictionCommentsRequest;
+use App\Http\Requests\Client\UserPredictions\AllUserPredictionsRequest;
 use App\Http\Resources\Client\CommentResource;
 use App\Http\Resources\Client\PredictionResource;
 use App\Models\PredictionOption;
@@ -35,6 +36,13 @@ class PredictionController extends Controller
         return $this->success(CommentResource::collection($predictionComments));
     }
 
+    public function myPredictions(AllUserPredictionsRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $userCreatedPredictions = $this->repository->userCreatedPredictions($this->userId, $validated);
+
+        return $this->success(PredictionResource::collection($userCreatedPredictions));
+    }
     public function store(AddPredictionsRequest $request): JsonResponse
     {
         $validated = $request->validated();

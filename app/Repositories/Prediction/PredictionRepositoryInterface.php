@@ -15,4 +15,5 @@ interface PredictionRepositoryInterface extends BaseRepositoryInterface
     public function userFeedPredictions($userId = null, $params = []);
     public function userSearchPredictions($userId = null, $params = []);
     public function allUserPredictions($userId = null, $params = []);
+    public function userCreatedPredictions($userId = null, $params = []);
 }
