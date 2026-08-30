@@ -9,6 +9,9 @@ class AuthenticateFromCookie
 {
     public function handle($request, \Closure $next)
     {
+        if ($request->is('admin')) {
+            return $next($request);
+        }
         $token = $request->cookie('auth_user');
 
         if ($token) {
