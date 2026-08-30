@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthenticateFromCookie
@@ -12,13 +13,18 @@ class AuthenticateFromCookie
         if ($request->is('admin')) {
             return $next($request);
         }
+
         $token = $request->cookie('auth_user');
 
         if ($token) {
             $accessToken = PersonalAccessToken::findToken($token);
 
-            if ($accessToken) {
+            // Check if the token is valid
+            if ($accessToken && $accessToken->tokenable) {
                 Auth::setUser($accessToken->tokenable);
+            } else {
+                // Log the invalid token attempt (optional)
+                Log::warning('Invalid token attempt: ' . $token);
             }
         }
 
