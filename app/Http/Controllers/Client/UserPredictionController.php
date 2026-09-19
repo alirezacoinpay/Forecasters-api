@@ -67,12 +67,14 @@ class UserPredictionController extends Controller
             $userPrediction->update([
                 'prediction_option_id' => $predictionOption->id,
             ]);
+        }else{
+
+            $userPrediction = $this->repository->create([
+                'user_id' => $user->getAuthIdentifier(),
+                'prediction_option_id' => $predictionOption->id,
+                'percentage' => 100,
+            ]);
         }
-        $userPrediction = $this->repository->create([
-            'user_id' => $user->getAuthIdentifier(),
-            'prediction_option_id' => $predictionOption->id,
-            'percentage' => 100,
-        ]);
         if (!empty($validated['comment'])) {
             $commentData = [
                 'user_id' => $user->getAuthIdentifier(),
