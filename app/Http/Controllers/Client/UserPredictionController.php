@@ -15,6 +15,7 @@ use App\Repositories\Prediction\PredictionRepositoryInterface;
 use App\Repositories\UserPrediction\UserPredictionRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserPredictionController extends Controller
 {
@@ -57,6 +58,9 @@ class UserPredictionController extends Controller
         }
         $user = Auth::user();
         $userPrediction = $this->repository->findByPredictionAndUser($user->id, $predictionOption->prediction_id);
+        Log::info('UserPredictionController:store', [
+            'userPrediction' => $userPrediction,
+        ]);
         if ($userPrediction) {
             $userPrediction->update([
                 'prediction_option_id' => $predictionOption->id,

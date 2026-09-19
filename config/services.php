@@ -53,5 +53,8 @@ return [
     'openai' => [
         'api_key' => env('LIARA_AI_KEY'),
         'base_url' => env('LIARA_AI_BASE_URL'),
-    ]
+    ],
+    'polymarket' => [
+        'gama_base_url' => env('POLYMARKET_GAMA_BASE_URL', 'https://gamma-api.polymarket.com/'),
+    ],
 ];

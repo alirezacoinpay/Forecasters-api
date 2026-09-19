@@ -7,13 +7,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "alirezappeto/entity-generator": "^1.0",
         "filament/filament": "^4.1",
-        "laravel/ai": "^0.10.1",
-        "laravel/framework": "^12.0",
+        "laravel/ai": "^0.11.0",
+        "laravel/framework": "^v13.29.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.10.1",
-        "mokhosh/filament-jalali": "^5.1",
+        "laravel/tinker": "^3.0.2",
+        "mokhosh/filament-jalali": "^6.0.0",
         "openai-php/client": "^0.18.0"
     },
     "require-dev": {
@@ -23,8 +22,8 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "pestphp/pest": "^3.8",
-        "pestphp/pest-plugin-laravel": "^3.2"
+        "pestphp/pest": "^v5.1.3",
+        "pestphp/pest-plugin-laravel": "^v5.0.1"
     },
     "autoload": {
         "psr-4": {
