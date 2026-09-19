@@ -19,9 +19,6 @@ class AddUserPredictionRequest extends FormRequest
     {
         return [
             'prediction_option_id' => ['required', 'integer', Rule::exists(PredictionOption::class, 'id')],
-            'comment.*' => ['nullable', 'array'],
-            'comment.text' => ['nullable', 'string'],
-            'comment.file' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webm', 'max:10000'],
         ];
     }
 }

@@ -75,18 +75,6 @@ class UserPredictionController extends Controller
                 'percentage' => 100,
             ]);
         }
-        if (!empty($validated['comment'])) {
-            $commentData = [
-                'user_id' => $user->getAuthIdentifier(),
-                'prediction_id' => $predictionOption->prediction_id,
-                'text' => $validated['comment']['text'],
-            ];
-            if (isset($validated['comment']['file'])) {
-
-                $commentData['file'] = FileHelper::uploadFile($validated['comment']['file'], Comment::FILE_PATH);
-            }
-            $this->commentRepository->create($commentData);
-        }
 
         return $this->success(new UserPredictionResource($userPrediction), 'api.created.userPrediction');
     }
