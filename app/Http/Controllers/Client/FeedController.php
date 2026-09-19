@@ -25,10 +25,6 @@ class FeedController extends Controller
     {
 
         $validated = $request->validated();
-        Log::info('FeedController:feedPagePredictions', [
-            'validated' => $validated,
-        ]);
-
         $predictions = $this->repository->userFeedPredictions($this->userId, $validated);
 
         if (count($predictions) > 0) {

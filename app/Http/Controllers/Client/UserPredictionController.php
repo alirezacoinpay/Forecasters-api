@@ -58,13 +58,12 @@ class UserPredictionController extends Controller
         }
         $user = Auth::user();
         $userPrediction = $this->repository->findByPredictionAndUser($user->id, $predictionOption->prediction_id);
-        Log::info('UserPredictionController:store', [
-            'userPrediction' => $userPrediction->id,
-            'user_id' => $user->id,
-            'prediction_id' => $predictionOption->prediction_id,
-        ]);
+
         if ($userPrediction) {
             Log::info('UserPredictionController:store', [
+                'userPrediction' => $userPrediction->id,
+                'user_id' => $user->id,
+                'prediction_id' => $predictionOption->prediction_id,
                 '$userPrediction' => true,
             ]);
             $userPrediction->update([
